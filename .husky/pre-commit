@@ -1,3 +1,4 @@
 echo "Husky pre-commit start"
+npm run format:fix
 npm run lint
 echo "Husky pre-commit finished!"
