@@ -1,23 +1,14 @@
-import { useState } from 'react';
 import Container from './components/Container';
+import './index.scss';
+import SearchContainer from './components/SearchContainer';
+import { ErrorButton } from './components/error/ErrorButton';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <Container>
-      <h1>Class-component</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Class-component React App</h1>
+      <SearchContainer />
+      <ErrorButton />
     </Container>
   );
 }
