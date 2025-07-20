@@ -1,11 +1,12 @@
 import React from 'react';
 
-interface Props {
+interface SearchButtonProps {
   onClick: () => void;
 }
 
-const SearchButton: React.FC<Props> = ({ onClick }) => (
-  <button onClick={onClick}>Search</button>
-);
-
-export default SearchButton;
+export default class SearchButton extends React.Component<SearchButtonProps> {
+  render() {
+    const { onClick } = this.props;
+    return <button onClick={onClick}>Search</button>;
+  }
+}

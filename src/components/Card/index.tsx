@@ -1,14 +1,17 @@
 import React from 'react';
 
-interface Props {
+interface CardProps {
   name: string;
   url: string;
 }
 
-const Card: React.FC<Props> = ({ name, url }) => (
-  <a href={url}>
-    <strong>{name}</strong>
-  </a>
-);
-
-export default Card;
+export default class Card extends React.Component<CardProps> {
+  render() {
+    const { name, url } = this.props;
+    return (
+      <a href={url}>
+        <strong>{name}</strong>
+      </a>
+    );
+  }
+}

@@ -1,26 +1,32 @@
 import React from 'react';
 
-type Props = {
+type SearchInputProps = {
   searchQuery: string;
   onChange: (value: string) => void;
   onEnter: () => void;
 };
 
-const SearchInput: React.FC<Props> = ({ searchQuery, onChange, onEnter }) => {
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && onEnter) {
-      onEnter();
+export default class SearchInput extends React.Component<SearchInputProps> {
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      this.props.onEnter();
     }
   };
 
-  return (
-    <input
-      type="text"
-      value={searchQuery}
-      onChange={(event) => onChange(event.target.value)}
-      onKeyDown={handleKeyDown}
-      placeholder="Type to search..."
-    />
-  );
-};
-export default SearchInput;
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.onChange(event.target.value);
+  };
+
+  render() {
+    const { searchQuery } = this.props;
+    return (
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={this.handleChange}
+        onKeyDown={this.handleKeyDown}
+        placeholder="Type to search..."
+      />
+    );
+  }
+}

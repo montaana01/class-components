@@ -1,16 +1,19 @@
 import React from 'react';
 import Card from '../Card';
 
-interface Props {
+interface CardListProps {
   items: { name: string; url: string }[];
 }
 
-const CardList: React.FC<Props> = ({ items }) => (
-  <div className="cardList">
-    {items.map((item) => (
-      <Card key={item.name} name={item.name} url={item.url} />
-    ))}
-  </div>
-);
-
-export default CardList;
+export default class CardList extends React.Component<CardListProps> {
+  render() {
+    const { items } = this.props;
+    return (
+      <div className="cardList">
+        {items.map((item) => (
+          <Card key={item.name} name={item.name} url={item.url} />
+        ))}
+      </div>
+    );
+  }
+}
