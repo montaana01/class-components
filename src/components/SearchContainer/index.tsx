@@ -1,24 +1,35 @@
 import React from 'react';
-import { fetchAbilities } from '../../api/pokeApi';
+import { fetchAbilities, type PokeApiResponse } from '../../api/pokeApi';
 import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
 
-type ApiResponse = {
+export type ApiResponse = {
   name: string;
   url: string;
 };
 
+type State = {
+  searchQuery: string;
+  results: ApiResponse[];
+  isLoading: boolean;
+  error: string | null;
+  productsPerPage: number;
+  nextPageUrl?: string;
+  prevPageUrl?: string;
+};
+
 export default class SearchContainer extends React.Component {
-  state = {
+  state: State = {
     searchQuery: '',
     results: [],
     isLoading: false,
     error: null,
+    productsPerPage: 50,
   };
 
   componentDidMount() {
-    const savedQuery = localStorage.getItem('searchTerm');
+    const savedQuery: string | null = localStorage.getItem('searchTerm');
     if (savedQuery) {
       this.setState({ searchQuery: savedQuery }, this.handleSearch);
     } else {
@@ -26,16 +37,21 @@ export default class SearchContainer extends React.Component {
     }
   }
 
-  handleSearch = async () => {
-    const query = this.state.searchQuery.trim().toLowerCase();
+  handleSearch = async (paginationUrl?: string) => {
+    const query: string = this.state.searchQuery.trim().toLowerCase();
     this.setState({ isLoading: true, error: null });
 
     try {
-      const data = await fetchAbilities();
-      const filtered = data.filter((item: ApiResponse) =>
+      const data: PokeApiResponse = await fetchAbilities(
+        this.state.productsPerPage,
+        paginationUrl
+      );
+      const filtered: ApiResponse[] = data.results.filter((item: ApiResponse) =>
         item.name.includes(query)
       );
       localStorage.setItem('searchTerm', query);
+      this.setState({ nextPageUrl: data.next });
+      this.setState({ prevPageUrl: data.previous });
       this.setState({ results: filtered });
     } finally {
       this.setState({ isLoading: false });
@@ -47,17 +63,45 @@ export default class SearchContainer extends React.Component {
   };
 
   render() {
-    const { searchQuery, results, isLoading, error } = this.state;
+    const { searchQuery, results, isLoading, error, nextPageUrl, prevPageUrl } =
+      this.state;
 
     return (
-      <div>
+      <>
         <SearchInput
           searchQuery={searchQuery}
           onChange={this.handleInputChange}
         />
-        <SearchButton onClick={this.handleSearch} />
+        <SearchButton
+          onClick={() => {
+            this.handleSearch();
+          }}
+        />
         <SearchResult items={results} isLoading={isLoading} error={error} />
-      </div>
+        {!isLoading && (
+          <div
+            style={{
+              display: 'flex',
+              gap: '1rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <button
+              onClick={() => this.handleSearch(prevPageUrl)}
+              disabled={!prevPageUrl}
+            >
+              ⇦
+            </button>
+            <button
+              onClick={() => this.handleSearch(nextPageUrl)}
+              disabled={!nextPageUrl}
+            >
+              ⇨
+            </button>
+          </div>
+        )}
+      </>
     );
   }
 }
