@@ -71,6 +71,7 @@ export default class SearchContainer extends React.Component {
         <SearchInput
           searchQuery={searchQuery}
           onChange={this.handleInputChange}
+          onEnter={() => this.handleSearch()}
         />
         <SearchButton
           onClick={() => {
