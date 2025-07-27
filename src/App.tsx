@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 import Container from './components/Container';
 import SearchContainer from './components/SearchContainer';
 import { ErrorButton } from './components/error/ErrorButton';
@@ -11,17 +11,19 @@ function App() {
   //Todo: rebuild this component to pretty view
   return (
     <Container>
-      <div className="App">
-        <Link to={'/'}>
-          <h1>Class-component React App</h1>
-        </Link>
+      <header className="App">
+        <h1>Class-component React App</h1>
         <Navigation />
-      </div>
-      <Routes>
-        <Route path={'about'} element={<AboutApp />} />
-        <Route path={'/'} element={<SearchContainer />} />
-        <Route path={'*'} element={<NotFound />} />
-      </Routes>
+      </header>
+
+      <main>
+        <Routes>
+          <Route path="/" element={<SearchContainer />} />
+          <Route path="/about" element={<AboutApp />} />
+          <Route path={'*'} element={<NotFound />} />
+        </Routes>
+      </main>
+
       <ErrorButton />
     </Container>
   );

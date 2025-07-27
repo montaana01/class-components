@@ -1,9 +1,13 @@
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 
 export default function Navigation() {
   return (
     <nav>
-      <Link to={'/about'}>{'About App'}</Link>
+      <NavLink to="/" end>
+        Home
+      </NavLink>
+      {' | '}
+      <NavLink to="/about">About</NavLink>
     </nav>
   );
 }
