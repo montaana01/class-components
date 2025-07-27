@@ -13,10 +13,7 @@ export type ApiResponse = {
 const productsPerPage = 50;
 
 export default function SearchContainer() {
-  const [searchQuery, setSearchQuery] = useLocalStorage<string>(
-    'searchTerm',
-    ''
-  );
+  const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
   const [results, setResults] = useState<ApiResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +33,7 @@ export default function SearchContainer() {
       const filtered: ApiResponse[] = data.results.filter((item: ApiResponse) =>
         item.name.includes(query)
       );
-      localStorage.setItem('searchTerm', query);
+      setSearchQuery(query);
       setNextPageUrl(data.next ?? undefined);
       setPrevPageUrl(data.previous ?? undefined);
       setResults(filtered);

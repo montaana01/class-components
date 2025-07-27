@@ -1,23 +1,15 @@
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
-export default function useLocalStorage<T>(
+export default function useLocalStorage(
   key: string,
-  initialValue: T
-): [T, Dispatch<SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(() => {
-    try {
-      const storage = window.localStorage.getItem(key);
-      return storage ? JSON.parse(storage) : initialValue;
-    } catch {
-      return initialValue;
-    }
+  initialValue: string
+): [string, Dispatch<SetStateAction<string>>] {
+  const [value, setValue] = useState<string>(() => {
+    const stored = window.localStorage.getItem(key);
+    return stored !== null ? stored : initialValue;
   });
   useEffect(() => {
-    try {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (e) {
-      console.warn(`Cannot set localStorage key "${key}":`, e);
-    }
+    window.localStorage.setItem(key, value);
   }, [key, value]);
 
   return [value, setValue];
