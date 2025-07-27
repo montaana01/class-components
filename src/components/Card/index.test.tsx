@@ -4,11 +4,12 @@ import { render, screen } from '@testing-library/react';
 import Card from './index';
 
 describe('Card Component', () => {
+  const baseUrl = 'https://example.com';
   it('renders an anchor with the correct href and name inside component', () => {
-    render(<Card name="Example" url="https://example.com" />);
+    render(<Card name="Example" url={baseUrl} />);
     const linkElement = screen.getByRole('link');
     expect(linkElement).toBeInTheDocument();
-    expect(linkElement).toHaveAttribute('href', 'https://example.com');
+    expect(linkElement).toHaveAttribute('href', baseUrl);
     expect(linkElement).toHaveTextContent('Example');
   });
 
@@ -19,7 +20,7 @@ describe('Card Component', () => {
   });
 
   it('handles empty name gracefully', () => {
-    render(<Card name="" url="https://example.com" />);
+    render(<Card name="" url={baseUrl} />);
     const linkElement = screen.getByRole('link');
     expect(linkElement).toHaveTextContent('');
   });
