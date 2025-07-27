@@ -1,4 +1,5 @@
 import CardList from '../../CardList';
+import isEmpty from '../../../helpers/isEmpty.ts';
 
 const SearchStateMessage: Record<string, string> = {
   loading: 'Loading...',
@@ -29,7 +30,7 @@ export default function SearchResult({
     );
   }
 
-  if (items.length === 0) {
+  if (isEmpty(items)) {
     return <p className="padding">{SearchStateMessage.notFound}</p>;
   }
 
