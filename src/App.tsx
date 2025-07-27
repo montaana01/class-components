@@ -4,6 +4,7 @@ import SearchContainer from './components/SearchContainer';
 import { ErrorButton } from './components/error/ErrorButton';
 import Navigation from './components/Navigation';
 import AboutApp from './components/AboutApp';
+import NotFound from './components/NotFound';
 import './index.scss';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path={'about'} element={<AboutApp />} />
         <Route path={'/'} element={<SearchContainer />} />
+        <Route path={'*'} element={<NotFound />} />
       </Routes>
       <ErrorButton />
     </Container>
