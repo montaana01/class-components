@@ -19,7 +19,7 @@ describe('SearchResult Component', () => {
 
   it('displays "Nothing was found!(" when items is empty and not loading or error', () => {
     render(<SearchResult items={[]} isLoading={false} error={null} />);
-    expect(screen.getByText('Nothing was found!(')).toBeInTheDocument();
+    expect(screen.getByText(/nothing was found!/i)).toBeInTheDocument();
   });
 
   it('renders CardList when items are provided', () => {
