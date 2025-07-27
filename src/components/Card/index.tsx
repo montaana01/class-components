@@ -1,9 +1,9 @@
 import React from 'react';
 
-interface CardProps {
+type CardProps = {
   name: string;
   url: string;
-}
+};
 
 export default class Card extends React.Component<CardProps> {
   render() {

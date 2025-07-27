@@ -1,12 +1,13 @@
 import React from 'react';
 
-interface SearchButtonProps {
-  onClick: () => void;
-}
+type SearchButtonProps = {
+  onClick: VoidFunction;
+};
+const SearchButtonText = 'Search';
 
 export default class SearchButton extends React.Component<SearchButtonProps> {
   render() {
     const { onClick } = this.props;
-    return <button onClick={onClick}>Search</button>;
+    return <button onClick={onClick}>{SearchButtonText}</button>;
   }
 }
