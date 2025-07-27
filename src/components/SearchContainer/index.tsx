@@ -1,108 +1,85 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { fetchAbilities, type PokeApiResponse } from '../../api/pokeApi';
 import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export type ApiResponse = {
   name: string;
   url: string;
 };
 
-type State = {
-  searchQuery: string;
-  results: ApiResponse[];
-  isLoading: boolean;
-  error: string | null;
-  productsPerPage: number;
-  nextPageUrl?: string;
-  prevPageUrl?: string;
-};
+const productsPerPage = 50;
 
-export default class SearchContainer extends React.Component {
-  state: State = {
-    searchQuery: '',
-    results: [],
-    isLoading: false,
-    error: null,
-    productsPerPage: 50,
-  };
+export default function SearchContainer() {
+  const [searchQuery, setSearchQuery] = useLocalStorage<string>(
+    'searchTerm',
+    ''
+  );
+  const [results, setResults] = useState<ApiResponse[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [nextPageUrl, setNextPageUrl] = useState<string | undefined>();
+  const [prevPageUrl, setPrevPageUrl] = useState<string | undefined>();
 
-  componentDidMount() {
-    const savedQuery: string | null = localStorage.getItem('searchTerm');
-    if (savedQuery) {
-      this.setState({ searchQuery: savedQuery }, this.handleSearch);
-    } else {
-      this.handleSearch();
-    }
-  }
-
-  handleSearch = async (paginationUrl?: string) => {
-    const query: string = this.state.searchQuery.trim().toLowerCase();
-    this.setState({ isLoading: true, error: null });
+  async function handleSearch(paginationUrl?: string) {
+    const query: string = String(searchQuery).trim().toLowerCase();
+    setIsLoading(true);
+    setError(null);
 
     try {
       const data: PokeApiResponse = await fetchAbilities(
-        this.state.productsPerPage,
+        productsPerPage,
         paginationUrl
       );
       const filtered: ApiResponse[] = data.results.filter((item: ApiResponse) =>
         item.name.includes(query)
       );
       localStorage.setItem('searchTerm', query);
-      this.setState({ nextPageUrl: data.next });
-      this.setState({ prevPageUrl: data.previous });
-      this.setState({ results: filtered });
+      setNextPageUrl(data.next ?? undefined);
+      setPrevPageUrl(data.previous ?? undefined);
+      setResults(filtered);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
-  };
-
-  handleInputChange = (value: string) => {
-    this.setState({ searchQuery: value });
-  };
-
-  render() {
-    const { searchQuery, results, isLoading, error, nextPageUrl, prevPageUrl } =
-      this.state;
-
-    return (
-      <>
-        <SearchInput
-          searchQuery={searchQuery}
-          onChange={this.handleInputChange}
-          onEnter={() => this.handleSearch()}
-        />
-        <SearchButton
-          onClick={() => {
-            this.handleSearch();
-          }}
-        />
-        <SearchResult items={results} isLoading={isLoading} error={error} />
-        {!isLoading && (
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <button
-              onClick={() => this.handleSearch(prevPageUrl)}
-              disabled={!prevPageUrl}
-            >
-              ⇦
-            </button>
-            <button
-              onClick={() => this.handleSearch(nextPageUrl)}
-              disabled={!nextPageUrl}
-            >
-              ⇨
-            </button>
-          </div>
-        )}
-      </>
-    );
   }
+  useEffect(() => {
+    void handleSearch();
+  }, []);
+
+  return (
+    <>
+      <SearchInput
+        searchQuery={searchQuery}
+        onChange={setSearchQuery}
+        onEnter={() => handleSearch()}
+      />
+      <SearchButton onClick={() => handleSearch()} />
+      <SearchResult items={results} isLoading={isLoading} error={error} />
+      {!isLoading && (
+        <div
+          style={{
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <button
+            onClick={() => handleSearch(prevPageUrl)}
+            disabled={!prevPageUrl}
+          >
+            ⇦
+          </button>
+          <button
+            onClick={() => handleSearch(nextPageUrl)}
+            disabled={!nextPageUrl}
+          >
+            ⇨
+          </button>
+        </div>
+      )}
+    </>
+  );
 }
