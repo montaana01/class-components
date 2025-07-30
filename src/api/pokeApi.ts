@@ -2,10 +2,11 @@ import { type AbilityDetail, API_URL, type PokeApiResponse } from './constants';
 
 export async function fetchAbilities(
   limit: number,
-  paginationUrl?: string
+  offset: number = 0
 ): Promise<PokeApiResponse> {
-  const url = paginationUrl ?? `${API_URL}/ability?limit=${limit}`;
-  const response = await fetch(url);
+  const response = await fetch(
+    `${API_URL}/ability?offset=${offset}&limit=${limit}`
+  );
   if (!response.ok) throw new Error('Error while data loading!');
   return response.json();
 }
