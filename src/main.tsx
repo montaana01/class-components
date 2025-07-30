@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import ErrorBoundary from './components/error/ErrorBoundary';
-import { BrowserRouter } from 'react-router';
 
 const rootElement: HTMLDivElement = document.createElement('div');
 rootElement.id = 'root';
@@ -10,8 +9,6 @@ document.body.append(rootElement);
 
 createRoot(rootElement).render(
   <ErrorBoundary>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </ErrorBoundary>
 );
