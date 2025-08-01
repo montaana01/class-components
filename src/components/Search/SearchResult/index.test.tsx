@@ -14,7 +14,9 @@ describe('SearchResult Component', () => {
     render(
       <SearchResult items={[]} isLoading={false} error="Failed to load" />
     );
-    expect(screen.getByText('Error: Failed to load')).toBeInTheDocument();
+    expect(
+      screen.getByText('Have some problems: Failed to load')
+    ).toBeInTheDocument();
   });
 
   it('displays "Nothing was found!(" when items is empty and not loading or error', () => {
