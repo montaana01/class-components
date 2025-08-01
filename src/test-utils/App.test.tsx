@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router';
 describe('App', () => {
   it('renders the main heading and includes SearchContainer and ErrorButton at App', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/search?page=1']}>
         <App />
       </MemoryRouter>
     );
