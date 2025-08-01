@@ -4,38 +4,36 @@ import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import {
-  API_PATH,
-  API_URL,
-  type CharacterDetail,
-} from '../../api/constants.ts';
-import { useParams } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { type CharacterDetail } from '../../api/constants.ts';
+
+type QueryParams = { page?: number; query?: string; active?: string };
 
 export default function SearchContainer() {
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [nextPageUrl, setNextPageUrl] = useState<string | undefined>();
-  const [prevPageUrl, setPrevPageUrl] = useState<string | undefined>();
 
   const [recordsCount, setRecordsCount] = useState<number>(0);
   const [records, setRecords] = useState<CharacterDetail[]>([]);
-  const params = useParams();
-  const [searchInput, setSearchInput] = useState(params.search || '');
-  const [searchQuery, setSearchQuery] = useLocalStorage(
-    'searchTerm',
-    params.search || ''
-  );
+  const query = useLocation();
+  const queryParams: QueryParams = query.search
+    .split('?')[1]
+    .split('&')
+    .reduce((acc, el) => {
+      const params = el.split('=');
+      acc[params[0]] = params[1];
+      return acc;
+    }, {});
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
 
-  function getProducts(options: FetchApiOptions) {
+  async function getProducts(options: FetchApiOptions) {
     setIsLoading(true);
     setError(null);
     try {
-      fetchApi<CharacterDetail>(options)
+      await fetchApi<CharacterDetail>(options)
         .then((data) => {
-          setNextPageUrl(data.info.next ?? undefined);
-          setPrevPageUrl(data.info.prev ?? undefined);
           setRecordsCount(data.info.count);
           setTotalPages(data.info.pages);
           setRecords(data.results);
@@ -51,33 +49,47 @@ export default function SearchContainer() {
   }
 
   useEffect(() => {
-    setSearchInput(searchQuery);
+    navigate(
+      `/search/?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}`
+    );
+    return () => {
+      setSearchQuery(searchQuery);
+    };
   }, []);
-
   useEffect(() => {
     const trimmedQuery = searchQuery.trim();
     setIsLoading(true);
     setError(null);
 
-    const fetchOptions =
-      trimmedQuery !== ''
-        ? { name: trimmedQuery }
-        : { paginationUrl: `${API_URL}/${API_PATH}/?page=${currentPage}` };
-
-    getProducts(fetchOptions);
-  }, [currentPage, searchQuery]);
+    let fetchOptions = {};
+    if (trimmedQuery !== '') {
+      fetchOptions = {
+        ...fetchOptions,
+        name: trimmedQuery,
+      };
+    }
+    if (queryParams.page) {
+      fetchOptions = {
+        ...fetchOptions,
+        page: queryParams.page,
+      };
+    }
+    getProducts(fetchOptions).catch((error) => {
+      setError(error.message || 'Data fetch error');
+    });
+  }, [queryParams.page, queryParams.query]);
 
   function handleSearch() {
-    setCurrentPage(1);
+    console.log(searchQuery);
+    navigate(`/search?page=1${searchQuery ? '&query=' + searchQuery : ''}`);
     setTotalPages(1);
-    setSearchQuery(searchInput);
   }
 
   return (
     <>
       <SearchInput
-        searchQuery={searchInput}
-        onChange={setSearchInput}
+        searchQuery={searchQuery}
+        onChange={setSearchQuery}
         onEnter={() => handleSearch()}
       />
       <SearchButton onClick={() => handleSearch()} />
@@ -93,23 +105,27 @@ export default function SearchContainer() {
         >
           <button
             onClick={() => {
-              setCurrentPage((page) => Math.max(page - 1, 1));
-              getProducts({ paginationUrl: prevPageUrl });
+              navigate(
+                `/search?page=${+(queryParams.page || 0) - 1}${searchQuery ? '&query=' + searchQuery : ''}`
+              );
             }}
-            disabled={!records || recordsCount === 1 || currentPage === 1}
+            disabled={
+              !records || recordsCount === 1 || +(queryParams.page || 0) === 1
+            }
           >
             ⇦
           </button>
-          {currentPage} / {totalPages}
+          {Number(queryParams.page)} / {totalPages}
           <button
             onClick={() => {
-              setCurrentPage((page) => page + 1);
-              getProducts({ paginationUrl: nextPageUrl });
+              navigate(
+                `/search?page=${+(queryParams.page || 0) + 1}${searchQuery ? '&query=' + searchQuery : ''}`
+              );
             }}
             disabled={
               !records ||
               recordsCount <= 1 ||
-              currentPage === Math.floor(totalPages)
+              +(queryParams.page || 0) === Math.floor(totalPages)
             }
           >
             ⇨
