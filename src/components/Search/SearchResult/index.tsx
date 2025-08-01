@@ -1,14 +1,15 @@
 import CardList from '../../CardList';
-import isEmpty from '../../../helpers/isEmpty.ts';
+import type { CharacterDetail } from '../../../api/constants.ts';
+import isEmptyArray from '../../../helpers/isEmpty.ts';
 
 const SearchStateMessage: Record<string, string> = {
   loading: 'Loading...',
-  error: 'Error:',
+  error: 'Have some problems:',
   notFound: 'Nothing was found!',
 };
 
 type SearchResultProps = {
-  items: { name: string; url: string }[];
+  items: CharacterDetail[];
   isLoading: boolean;
   error: string | null;
 };
@@ -31,7 +32,7 @@ export default function SearchResult({
   }
   if (isEmptyArray(items)) {
     return <p className="padding">{SearchStateMessage.notFound}</p>;
+  } else {
+    return <CardList items={items} />;
   }
-
-  return <CardList items={items} />;
 }

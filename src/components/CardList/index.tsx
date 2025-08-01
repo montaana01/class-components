@@ -1,19 +1,15 @@
 import Card from '../Card';
-
-type CardListItemProps = {
-  name: string;
-  url: string;
-};
+import type { CharacterDetail } from '../../api/constants.ts';
 
 type CardListProps = {
-  items: CardListItemProps[];
+  items: CharacterDetail[];
 };
 
 export default function CardList({ items }: CardListProps) {
   return (
     <div className="cardList">
-      {items.map(({ name, url }: CardListItemProps) => (
-        <Card key={name} name={name} url={url} />
+      {items.map((item: CharacterDetail) => (
+        <Card key={item.id} options={item} />
       ))}
     </div>
   );
