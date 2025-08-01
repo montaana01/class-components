@@ -1,59 +1,87 @@
 import { useEffect, useState } from 'react';
-import { fetchAbilities, type PokeApiResponse } from '../../api/pokeApi';
+import { fetchApi, type FetchApiOptions } from '../../api/apiDriver.ts';
 import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
 import useLocalStorage from '../../hooks/useLocalStorage';
-
-export type ApiResponse = {
-  name: string;
-  url: string;
-};
-
-const productsPerPage = 50;
+import {
+  API_PATH,
+  API_URL,
+  type CharacterDetail,
+} from '../../api/constants.ts';
+import { useParams } from 'react-router';
 
 export default function SearchContainer() {
-  const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
-  const [results, setResults] = useState<ApiResponse[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [nextPageUrl, setNextPageUrl] = useState<string | undefined>();
   const [prevPageUrl, setPrevPageUrl] = useState<string | undefined>();
 
-  async function handleSearch(paginationUrl?: string) {
-    const query: string = String(searchQuery).trim().toLowerCase();
+  const [recordsCount, setRecordsCount] = useState<number>(0);
+  const [records, setRecords] = useState<CharacterDetail[]>([]);
+  const params = useParams();
+  const [searchInput, setSearchInput] = useState(params.search || '');
+  const [searchQuery, setSearchQuery] = useLocalStorage(
+    'searchTerm',
+    params.search || ''
+  );
+
+  function getProducts(options: FetchApiOptions) {
     setIsLoading(true);
     setError(null);
-
     try {
-      const data: PokeApiResponse = await fetchAbilities(
-        productsPerPage,
-        paginationUrl
-      );
-      const filtered: ApiResponse[] = data.results.filter((item: ApiResponse) =>
-        item.name.includes(query)
-      );
-      setSearchQuery(query);
-      setNextPageUrl(data.next ?? undefined);
-      setPrevPageUrl(data.previous ?? undefined);
-      setResults(filtered);
+      fetchApi<CharacterDetail>(options)
+        .then((data) => {
+          setNextPageUrl(data.info.next ?? undefined);
+          setPrevPageUrl(data.info.prev ?? undefined);
+          setRecordsCount(data.info.count);
+          setTotalPages(data.info.pages);
+          setRecords(data.results);
+        })
+        .catch((error) => {
+          setError(error.message || 'Data fetch error');
+          setRecords([]);
+        })
+        .finally(() => setIsLoading(false));
     } finally {
       setIsLoading(false);
     }
   }
+
   useEffect(() => {
-    void handleSearch();
+    setSearchInput(searchQuery);
   }, []);
+
+  useEffect(() => {
+    const trimmedQuery = searchQuery.trim();
+    setIsLoading(true);
+    setError(null);
+
+    const fetchOptions =
+      trimmedQuery !== ''
+        ? { name: trimmedQuery }
+        : { paginationUrl: `${API_URL}/${API_PATH}/?page=${currentPage}` };
+
+    getProducts(fetchOptions);
+  }, [currentPage, searchQuery]);
+
+  function handleSearch() {
+    setCurrentPage(1);
+    setTotalPages(1);
+    setSearchQuery(searchInput);
+  }
 
   return (
     <>
       <SearchInput
-        searchQuery={searchQuery}
-        onChange={setSearchQuery}
+        searchQuery={searchInput}
+        onChange={setSearchInput}
         onEnter={() => handleSearch()}
       />
       <SearchButton onClick={() => handleSearch()} />
-      <SearchResult items={results} isLoading={isLoading} error={error} />
+      <SearchResult items={records} isLoading={isLoading} error={error} />
       {!isLoading && (
         <div
           style={{
@@ -64,14 +92,25 @@ export default function SearchContainer() {
           }}
         >
           <button
-            onClick={() => handleSearch(prevPageUrl)}
-            disabled={!prevPageUrl}
+            onClick={() => {
+              setCurrentPage((page) => Math.max(page - 1, 1));
+              getProducts({ paginationUrl: prevPageUrl });
+            }}
+            disabled={!records || recordsCount === 1 || currentPage === 1}
           >
             ⇦
           </button>
+          {currentPage} / {totalPages}
           <button
-            onClick={() => handleSearch(nextPageUrl)}
-            disabled={!nextPageUrl}
+            onClick={() => {
+              setCurrentPage((page) => page + 1);
+              getProducts({ paginationUrl: nextPageUrl });
+            }}
+            disabled={
+              !records ||
+              recordsCount <= 1 ||
+              currentPage === Math.floor(totalPages)
+            }
           >
             ⇨
           </button>
