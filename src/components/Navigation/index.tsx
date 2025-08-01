@@ -3,7 +3,7 @@ import { NavLink } from 'react-router';
 export default function Navigation() {
   return (
     <nav>
-      <NavLink to="/" end>
+      <NavLink to="/search?page=1" end>
         Home
       </NavLink>
       {' | '}
