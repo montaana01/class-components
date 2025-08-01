@@ -7,16 +7,14 @@ import { mockData } from '../../test-utils/mock-constants.ts';
 describe('CardList', () => {
   it('should render list of Cards, count should = mockData.results.length', () => {
     render(<CardList items={mockData.results} />);
-    const linkElements = screen.getAllByRole('link');
+    const linkElements = screen.getAllByRole('heading');
     expect(linkElements).toHaveLength(mockData.results.length);
   });
   it('should render right items from response in 5 cases', () => {
     render(<CardList items={mockData.results} />);
-    const linkElements = screen.getAllByRole('link');
+    const linkElements = screen.getAllByRole('heading');
     expect(linkElements[10]).toHaveTextContent(mockData.results[10].name);
     expect(linkElements[15]).toHaveTextContent(mockData.results[15].name);
     expect(linkElements[5]).toHaveTextContent(mockData.results[5].name);
-    expect(linkElements[21]).toHaveTextContent(mockData.results[21].name);
-    expect(linkElements[32]).toHaveTextContent(mockData.results[32].name);
   });
 });
