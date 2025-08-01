@@ -1,3 +1,3 @@
-export default function isEmpty<T>(array: T[]): boolean {
-  return array.length === 0;
+export default function isEmptyArray<T>(array: T[]): boolean {
+  return !Array.isArray(array) || array.length === 0;
 }

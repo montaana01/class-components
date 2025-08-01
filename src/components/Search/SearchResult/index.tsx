@@ -29,8 +29,7 @@ export default function SearchResult({
       </p>
     );
   }
-
-  if (isEmpty(items)) {
+  if (isEmptyArray(items)) {
     return <p className="padding">{SearchStateMessage.notFound}</p>;
   }
 
