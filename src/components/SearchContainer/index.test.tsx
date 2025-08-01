@@ -3,7 +3,7 @@ import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SearchContainer from './index';
-import { fetchAbilities } from '../../api/pokeApi';
+import { fetchApi } from '../../api/apiDriver.ts';
 import { mockData } from '../../test-utils/mock-constants.ts';
 
 vi.mock('../../api/pokeApi', () => ({
@@ -16,8 +16,8 @@ describe('SearchContainer', () => {
   });
 
   it('initial load with no saved query should fetch data and display results', async () => {
-    const fetchAbilitiesMock = vi.mocked(fetchAbilities);
-    fetchAbilitiesMock.mockResolvedValue(mockData);
+    const fetchApiMock = vi.mocked(fetchApi);
+    fetchApiMock.mockResolvedValue(mockData);
 
     render(<SearchContainer />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
@@ -30,8 +30,8 @@ describe('SearchContainer', () => {
 
   it('initial load with saved query should use it for filtering', async () => {
     localStorage.setItem('searchTerm', mockData.results[0].name);
-    const fetchAbilitiesMock = vi.mocked(fetchAbilities);
-    fetchAbilitiesMock.mockResolvedValue(mockData);
+    const fetchApiMock = vi.mocked(fetchApi);
+    fetchApiMock.mockResolvedValue(mockData);
 
     render(<SearchContainer />);
     await waitFor(() => {
@@ -46,8 +46,8 @@ describe('SearchContainer', () => {
   });
 
   it('updates input value and triggers search on button click', async () => {
-    const fetchAbilitiesMock = vi.mocked(fetchAbilities);
-    fetchAbilitiesMock.mockResolvedValue(mockData);
+    const fetchApiMock = vi.mocked(fetchApi);
+    fetchApiMock.mockResolvedValue(mockData);
 
     render(<SearchContainer />);
     const user = userEvent.setup();
