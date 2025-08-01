@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router';
 import Container from './components/Container';
 import SearchContainer from './components/SearchContainer';
-import AboutApp from './components/AboutApp';
-import NotFound from './components/NotFound';
+import AboutApp from './components/features/AboutApp';
+import NotFound from './components/features/NotFound';
 import './index.scss';
 import MainPage from './components/features/MainPage';
 
