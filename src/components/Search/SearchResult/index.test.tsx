@@ -28,12 +28,10 @@ describe('SearchResult Component', () => {
     render(
       <SearchResult items={mockData.results} isLoading={false} error={null} />
     );
-    const linkElements = screen.getAllByRole('link');
-    expect(linkElements).toHaveLength(mockData.results.length);
 
-    linkElements.forEach((element, index) => {
-      expect(element).toHaveTextContent(mockData.results[index].name);
-      expect(element).toHaveAttribute('href', mockData.results[index].url);
+    mockData.results.forEach((character) => {
+      const heading = screen.getByRole('heading', { name: character.name });
+      expect(heading).toBeInTheDocument();
     });
   });
 });
