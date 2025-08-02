@@ -5,9 +5,7 @@ import App from '../App';
 
 describe('App', () => {
   it('renders the main heading and includes SearchContainer and ErrorButton at App', () => {
-    render(
-        <App />
-    );
+    render(<App />);
     expect(screen.getByText(/rick&morty react app/i)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/type to search.../i)
