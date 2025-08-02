@@ -1,9 +1,5 @@
 import Card from '../Card';
-import type { CharacterDetail } from '../../api/constants.ts';
-
-type CardListProps = {
-  items: CharacterDetail[];
-};
+import type { CardListProps, CharacterDetail } from '../../types';
 
 export default function CardList({ items }: CardListProps) {
   return (

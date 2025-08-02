@@ -1,17 +1,11 @@
 import CardList from '../../CardList';
-import type { CharacterDetail } from '../../../api/constants.ts';
 import isEmptyArray from '../../../helpers/isEmpty.ts';
+import type { SearchResultProps } from '../../../types';
 
 const SearchStateMessage: Record<string, string> = {
   loading: 'Loading...',
   error: 'Have some problems:',
   notFound: 'Nothing was found!',
-};
-
-type SearchResultProps = {
-  items: CharacterDetail[];
-  isLoading: boolean;
-  error: string | null;
 };
 
 export default function SearchResult({

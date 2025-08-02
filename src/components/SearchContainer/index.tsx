@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { fetchApi, type FetchApiOptions } from '../../api/apiDriver.ts';
+import { useLocation, useNavigate } from 'react-router';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { fetchApi } from '../../api/apiDriver.ts';
 import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
-import useLocalStorage from '../../hooks/useLocalStorage';
 import DetailedCard from '../DetailedCard';
-import { useLocation, useNavigate } from 'react-router';
-import { type CharacterDetail } from '../../api/constants.ts';
-
-export type QueryParams = { page?: number; query?: string; active?: string };
+import Button from '../Button';
+import type {
+  CharacterDetail,
+  FetchApiOptions,
+  QueryParams,
+} from '../../types';
 
 export default function SearchContainer() {
   const [totalPages, setTotalPages] = useState(1);
@@ -109,7 +112,8 @@ export default function SearchContainer() {
       <div className="search-body">
         <div className="search-panel">
           <div className="pagination">
-            <button
+            <Button
+              title={'⇦'}
               onClick={() =>
                 navigate(
                   `/search?page=${+(queryParams.page || 0) - 1}${
@@ -120,11 +124,10 @@ export default function SearchContainer() {
               disabled={
                 !records || recordsCount === 1 || +(queryParams.page || 0) === 1
               }
-            >
-              ⇦
-            </button>
+            />
             {Number(queryParams.page)} / {totalPages}
-            <button
+            <Button
+              title={'⇨'}
               onClick={() =>
                 navigate(
                   `/search?page=${+(queryParams.page || 0) + 1}${
@@ -137,9 +140,7 @@ export default function SearchContainer() {
                 recordsCount <= 1 ||
                 +(queryParams.page || 0) === Math.floor(totalPages)
               }
-            >
-              ⇨
-            </button>
+            />
           </div>
 
           <SearchResult items={records} isLoading={isLoading} error={error} />

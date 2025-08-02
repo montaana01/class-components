@@ -1,11 +1,6 @@
-import type { CharacterDetail } from '../../api/constants.ts';
 import './card.scss';
 import { useLocation, useNavigate } from 'react-router';
-import type { QueryParams } from '../SearchContainer';
-
-type CardProps = {
-  options: CharacterDetail;
-};
+import type { CardProps, QueryParams } from '../../types';
 
 export default function Card({ options }: CardProps) {
   const navigate = useNavigate();

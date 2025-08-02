@@ -1,10 +1,5 @@
 import React from 'react';
-
-type SearchInputProps = {
-  searchQuery: string;
-  onChange: (value: string) => void;
-  onEnter: () => void;
-};
+import type { SearchInputProps } from '../../../types';
 
 export default function SearchInput({
   searchQuery,

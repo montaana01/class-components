@@ -1,10 +1,5 @@
-import { API_PATH, API_URL, type ApiResponse } from './constants';
-
-export type FetchApiOptions = {
-  page?: string;
-  name?: string;
-  active?: string;
-};
+import { API_PATH, API_URL } from './constants';
+import type { ApiResponse, FetchApiOptions } from '../types';
 
 export async function fetchApi<T>(
   options: FetchApiOptions = {}

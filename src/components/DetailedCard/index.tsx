@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
-import type { ApiResponse, CharacterDetail } from '../../api/constants.ts';
 import { fetchApi } from '../../api/apiDriver.ts';
-
-type DetailedCardProps = {
-  name: string;
-  onClose: () => void;
-};
+import type {
+  ApiResponse,
+  CharacterDetail,
+  DetailedCardProps,
+} from '../../types';
+import Button from '../Button';
 
 export default function DetailedCard({ name, onClose }: DetailedCardProps) {
   const [data, setData] = useState<ApiResponse<CharacterDetail>>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const closeButton = <Button title={'× Close'} onClick={onClose} />;
 
   useEffect(() => {
     async function loadDetail() {
@@ -31,9 +33,7 @@ export default function DetailedCard({ name, onClose }: DetailedCardProps) {
   if (isLoading) {
     return (
       <div className="detail-container">
-        <button className="detail-close" onClick={onClose}>
-          × Close
-        </button>
+        {closeButton}
         <p>Loading details…</p>
       </div>
     );
@@ -42,9 +42,6 @@ export default function DetailedCard({ name, onClose }: DetailedCardProps) {
   if (error) {
     return (
       <div className="detail-container">
-        <button className="detail-close" onClick={onClose}>
-          × Close
-        </button>
         <p className="error">Error: {error}</p>
       </div>
     );
@@ -58,9 +55,7 @@ export default function DetailedCard({ name, onClose }: DetailedCardProps) {
 
   return (
     <div className="detail-container">
-      <button className="detail-close" onClick={onClose}>
-        × Close
-      </button>
+      {closeButton}
       <img src={detailedItem.image} alt={detailedItem.name} />
       <p>
         <strong>Status:</strong>{' '}
