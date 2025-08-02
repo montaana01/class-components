@@ -23,6 +23,7 @@ export default function SearchInput({
 
   return (
     <input
+      name="searchQuery"
       type="text"
       value={searchQuery}
       onChange={handleChange}
