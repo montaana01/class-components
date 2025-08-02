@@ -4,17 +4,24 @@ import { render, screen } from '@testing-library/react';
 import Card from './index';
 import SearchResult from '../Search/SearchResult';
 import { mockData } from '../../test-utils/mock-constants.ts';
+import { MemoryRouter } from 'react-router';
 
 describe('Card Component', () => {
   it('does not render anchor when url is missing', () => {
-    render(<Card options={{ ...mockData.results[3], url: '' }} />);
+    render(
+      <MemoryRouter initialEntries={['/search?page=1']}>
+        <Card options={{ ...mockData.results[3], url: '' }} />
+      </MemoryRouter>
+    );
     const linkElement = screen.queryByRole('link');
     expect(linkElement).not.toBeInTheDocument();
   });
 
   it('renders CardList when items are provided', () => {
     render(
-      <SearchResult items={mockData.results} isLoading={false} error={null} />
+      <MemoryRouter initialEntries={['/search?page=1']}>
+        <SearchResult items={mockData.results} isLoading={false} error={null} />
+      </MemoryRouter>
     );
 
     mockData.results.forEach((character) => {

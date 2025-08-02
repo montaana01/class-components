@@ -11,7 +11,7 @@ describe('App', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getByText(/class-component react app/i)).toBeInTheDocument();
+    expect(screen.getByText(/rick&morty react app/i)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/type to search.../i)
     ).toBeInTheDocument();

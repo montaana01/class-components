@@ -16,7 +16,7 @@ describe('MainPage', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: /class-component react app/i })
+      screen.getByRole('heading', { name: /rick&morty react app/i })
     ).toBeInTheDocument();
     expect(screen.getByText('NavigationMock')).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
