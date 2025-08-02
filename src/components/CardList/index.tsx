@@ -1,19 +1,16 @@
-import React from 'react';
 import Card from '../Card';
+import type { CharacterDetail } from '../../api/constants.ts';
 
-interface CardListProps {
-  items: { name: string; url: string }[];
-}
+type CardListProps = {
+  items: CharacterDetail[];
+};
 
-export default class CardList extends React.Component<CardListProps> {
-  render() {
-    const { items } = this.props;
-    return (
-      <div className="cardList">
-        {items.map((item) => (
-          <Card key={item.name} name={item.name} url={item.url} />
-        ))}
-      </div>
-    );
-  }
+export default function CardList({ items }: CardListProps) {
+  return (
+    <div className="cardList">
+      {items.map((item: CharacterDetail) => (
+        <Card key={item.id} options={item} />
+      ))}
+    </div>
+  );
 }
