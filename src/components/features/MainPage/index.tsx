@@ -6,7 +6,7 @@ export default function MainPage() {
   return (
     <>
       <header className="header">
-        <h1>Class-component React App</h1>
+        <h1>Rick&Morty React App</h1>
         <Navigation />
       </header>
       <main className="main">

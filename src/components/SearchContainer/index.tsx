@@ -4,10 +4,11 @@ import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import DetailedCard from '../DetailedCard';
 import { useLocation, useNavigate } from 'react-router';
 import { type CharacterDetail } from '../../api/constants.ts';
 
-type QueryParams = { page?: number; query?: string; active?: string };
+export type QueryParams = { page?: number; query?: string; active?: string };
 
 export default function SearchContainer() {
   const [totalPages, setTotalPages] = useState(1);
@@ -50,12 +51,13 @@ export default function SearchContainer() {
 
   useEffect(() => {
     navigate(
-      `/search/?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}`
+      `/search/?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
     return () => {
       setSearchQuery(searchQuery);
     };
   }, []);
+
   useEffect(() => {
     const trimmedQuery = searchQuery.trim();
     setIsLoading(true);
@@ -74,6 +76,12 @@ export default function SearchContainer() {
         page: queryParams.page,
       };
     }
+    if (queryParams.active) {
+      fetchOptions = {
+        ...fetchOptions,
+        active: queryParams.active,
+      };
+    }
     getProducts(fetchOptions).catch((error) => {
       setError(error.message || 'Data fetch error');
     });
@@ -81,57 +89,77 @@ export default function SearchContainer() {
 
   function handleSearch() {
     console.log(searchQuery);
-    navigate(`/search?page=1${searchQuery ? '&query=' + searchQuery : ''}`);
+    navigate(
+      `/search?page=1${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
+    );
     setTotalPages(1);
   }
 
   return (
     <>
-      <SearchInput
-        searchQuery={searchQuery}
-        onChange={setSearchQuery}
-        onEnter={() => handleSearch()}
-      />
-      <SearchButton onClick={() => handleSearch()} />
-      <SearchResult items={records} isLoading={isLoading} error={error} />
-      {!isLoading && (
-        <div
-          style={{
-            display: 'flex',
-            gap: '1rem',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <button
-            onClick={() => {
-              navigate(
-                `/search?page=${+(queryParams.page || 0) - 1}${searchQuery ? '&query=' + searchQuery : ''}`
-              );
-            }}
-            disabled={
-              !records || recordsCount === 1 || +(queryParams.page || 0) === 1
-            }
-          >
-            ⇦
-          </button>
-          {Number(queryParams.page)} / {totalPages}
-          <button
-            onClick={() => {
-              navigate(
-                `/search?page=${+(queryParams.page || 0) + 1}${searchQuery ? '&query=' + searchQuery : ''}`
-              );
-            }}
-            disabled={
-              !records ||
-              recordsCount <= 1 ||
-              +(queryParams.page || 0) === Math.floor(totalPages)
-            }
-          >
-            ⇨
-          </button>
+      <div className="search-header">
+        <SearchInput
+          searchQuery={searchQuery}
+          onChange={setSearchQuery}
+          onEnter={handleSearch}
+        />
+        <SearchButton onClick={handleSearch} />
+      </div>
+
+      <div className="search-body">
+        <div className="search-panel">
+          <div className="pagination">
+            <button
+              onClick={() =>
+                navigate(
+                  `/search?page=${+(queryParams.page || 0) - 1}${
+                    searchQuery ? `&query=${searchQuery}` : ''
+                  }${queryParams.active ? `&active=${queryParams.active}` : ''}`
+                )
+              }
+              disabled={
+                !records || recordsCount === 1 || +(queryParams.page || 0) === 1
+              }
+            >
+              ⇦
+            </button>
+            {Number(queryParams.page)} / {totalPages}
+            <button
+              onClick={() =>
+                navigate(
+                  `/search?page=${+(queryParams.page || 0) + 1}${
+                    searchQuery ? `&query=${searchQuery}` : ''
+                  }${queryParams.active ? `&active=${queryParams.active}` : ''}`
+                )
+              }
+              disabled={
+                !records ||
+                recordsCount <= 1 ||
+                +(queryParams.page || 0) === Math.floor(totalPages)
+              }
+            >
+              ⇨
+            </button>
+          </div>
+
+          <SearchResult items={records} isLoading={isLoading} error={error} />
         </div>
-      )}
+
+        {queryParams.active && (
+          <div className="detail-panel">
+            <DetailedCard
+              name={queryParams.active}
+              onClose={() =>
+                navigate(
+                  `/search?page=${queryParams.page || 1}${
+                    searchQuery ? `&query=${searchQuery}` : ''
+                  }`
+                )
+              }
+            />
+          </div>
+        )}
+      </div>
     </>
   );
 }

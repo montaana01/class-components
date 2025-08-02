@@ -1,13 +1,31 @@
 import type { CharacterDetail } from '../../api/constants.ts';
 import './card.scss';
+import { useLocation, useNavigate } from 'react-router';
+import type { QueryParams } from '../SearchContainer';
 
 type CardProps = {
   options: CharacterDetail;
 };
 
 export default function Card({ options }: CardProps) {
+  const navigate = useNavigate();
+  const query = useLocation();
+  const queryParams: QueryParams = query.search
+    .split('?')[1]
+    .split('&')
+    .reduce((acc, el) => {
+      const params = el.split('=');
+      acc[params[0]] = params[1];
+      return acc;
+    }, {});
+  const handleCardClick = () => {
+    queryParams.active = options.name;
+    navigate(
+      `/search/?${queryParams.page ? 'page=' + queryParams.page : ''}${queryParams.query ? '&query=' + queryParams.query : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
+    );
+  };
   return (
-    <div className={'card'}>
+    <div className={'card'} onClick={handleCardClick}>
       <div
         className={'card-shadow'}
         style={{
