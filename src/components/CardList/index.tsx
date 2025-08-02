@@ -7,7 +7,7 @@ type CardListProps = {
 
 export default function CardList({ items }: CardListProps) {
   return (
-    <div className="cardList">
+    <div className="card-list">
       {items.map((item: CharacterDetail) => (
         <Card key={item.id} options={item} />
       ))}

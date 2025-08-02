@@ -4,13 +4,17 @@ import { Outlet } from 'react-router';
 
 export default function MainPage() {
   return (
-    <header className="App">
-      <h1>Class-component React App</h1>
-      <Navigation />
-      <main>
+    <>
+      <header className="header">
+        <h1>Class-component React App</h1>
+        <Navigation />
+      </header>
+      <main className="main">
         <Outlet />
       </main>
-      <ErrorButton />
-    </header>
+      <footer>
+        <ErrorButton />
+      </footer>
+    </>
   );
 }

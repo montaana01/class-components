@@ -5,6 +5,7 @@
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 
   &-shadow {
     background-size: contain;
@@ -35,5 +36,8 @@
 
   p {
     font-size: 0.5rem;
+  }
+  &:hover {
+    scale: 1.1;
   }
 }
