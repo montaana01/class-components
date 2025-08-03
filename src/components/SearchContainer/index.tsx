@@ -90,12 +90,11 @@ export default function SearchContainer() {
     });
   }, [queryParams.page, queryParams.query]);
 
-  function handleSearch() {
-    console.log(searchQuery);
+  const handleSearch: VoidFunction = () => {
     navigate(
       `/search?page=1${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
-  }
+  };
 
   return (
     <>
