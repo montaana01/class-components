@@ -147,7 +147,7 @@ export default function SearchContainer() {
         {queryParams.active && (
           <div className="detail-panel">
             <DetailedCard
-              name={queryParams.active}
+              id={queryParams.active}
               onClose={() =>
                 navigate(
                   `/search?page=${queryParams.page || 1}${
