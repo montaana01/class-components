@@ -3,18 +3,37 @@
   line-height: 1.5;
   font-weight: 400;
 
-  --primary-background: #242424;
-  --primary-text: rgba(255, 255, 255, 0.87);
-  --secondary-text: rgba(255, 255, 255, 0.87);
-  --primary-links: #646cff;
-  --primary-links-hover: #535bf2;
-
   color-scheme: light dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #2563eb;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #f0f0f0;
+  --primary-color: #3b82f6;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.theme-toggle button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
 }
 
 html {
