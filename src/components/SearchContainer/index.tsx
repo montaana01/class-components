@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { fetchApi } from '../../api/apiDriver.ts';
 import SearchInput from '../Search/SearchInput';
@@ -54,7 +54,7 @@ export default function SearchContainer() {
 
   useEffect(() => {
     navigate(
-      `/search/?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
+      `/search?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
     return () => {
       setSearchQuery(searchQuery);

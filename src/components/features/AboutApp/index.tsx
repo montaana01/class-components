@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 export default function AboutApp() {
   return (
@@ -16,7 +16,7 @@ export default function AboutApp() {
         </a>
         ]
       </p>
-      <Link to="/">← Back to Search</Link>
+      <NavLink to="/">← Back to Search</NavLink>
     </div>
   );
 }

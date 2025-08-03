@@ -1,5 +1,5 @@
 import './card.scss';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { CardProps, QueryParams } from '../../types';
 
 export default function Card({ options }: CardProps) {
@@ -16,7 +16,7 @@ export default function Card({ options }: CardProps) {
   const handleCardClick = () => {
     queryParams.active = options.name;
     navigate(
-      `/search/?${queryParams.page ? 'page=' + queryParams.page : ''}${queryParams.query ? '&query=' + queryParams.query : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
+      `/search?${queryParams.page ? 'page=' + queryParams.page : ''}${queryParams.query ? '&query=' + queryParams.query : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
   };
   return (

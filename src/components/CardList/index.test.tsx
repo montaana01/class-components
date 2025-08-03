@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import CardList from './index.tsx';
 import { mockData } from '../../test-utils/mock-constants.ts';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('CardList', () => {
   it('should render list of Cards, count should = mockData.results.length', () => {
