@@ -11,13 +11,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-[data-theme="light"] {
+[data-theme='light'] {
   --bg-color: #ffffff;
   --text-color: #333333;
   --primary-color: #2563eb;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --bg-color: #121212;
   --text-color: #f0f0f0;
   --primary-color: #3b82f6;
@@ -26,7 +26,9 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .theme-toggle button {
