@@ -10,7 +10,7 @@ describe('Card Component', () => {
   it('does not render anchor when url is missing', () => {
     render(
       <MemoryRouter initialEntries={['/search?page=1']}>
-        <Card options={{ ...mockData.results[3], url: '' }} />
+        <Card cardOptions={{ ...mockData.results[3], url: '' }} />
       </MemoryRouter>
     );
     const linkElement = screen.queryByRole('link');
