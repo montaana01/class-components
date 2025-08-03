@@ -3,9 +3,13 @@
   line-height: 1.5;
   font-weight: 400;
 
+  --primary-background: #242424;
+  --primary-text: rgba(255, 255, 255, 0.87);
+  --secondary-text: rgba(255, 255, 255, 0.87);
+  --primary-links: #646cff;
+  --primary-links-hover: #535bf2;
+
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,10 +27,9 @@ html {
 
   text-align: center;
 
-  transition:
-    background-color 0.6s ease-out,
-    color 0.1s ease-out,
-    all 0.5s ease;
+  transition: background-color 0.6s ease-out,
+  color 0.1s ease-out,
+  all 0.5s ease;
 
   &::before {
     box-sizing: border-box;
@@ -136,9 +139,27 @@ button {
 
 .search {
   &-header {
+    width: 100%;
     display: flex;
     gap: 1rem;
   }
+
+  &-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    width: 50%;
+    padding-left: 1rem;
+    border-left: 1px solid var(--primary-text);
+  }
+
+  &-selection {
+    display: flex;
+    justify-content: flex-start;
+    width: 50%;
+    gap: 1rem;
+  }
+
   &-body {
     display: flex;
     gap: 1rem;
@@ -173,6 +194,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
     img {
       border-radius: 1rem;
     }
@@ -180,8 +202,25 @@ button {
 }
 
 @media (max-width: 600px) {
-  .search-body {
-    flex-direction: column;
+  .search {
+    &-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 0.5rem;
+      & > div {
+        width: 100%;
+        justify-content: space-around;
+      }
+    }
+
+    &-container {
+      border-left: unset;
+      padding-left: unset;
+    }
+    &-body {
+      flex-direction: column;
+    }
   }
   .detail-panel {
     border-left: none;

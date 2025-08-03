@@ -12,8 +12,11 @@ import type {
   FetchApiOptions,
   QueryParams,
 } from '../../types';
+import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 
 export default function SearchContainer() {
+  const { selectedItems, clearAll } = useSelectedItemsStore();
+
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -99,12 +102,21 @@ export default function SearchContainer() {
   return (
     <>
       <div className="search-header">
-        <SearchInput
-          searchQuery={searchQuery}
-          onChange={setSearchQuery}
-          onEnter={handleSearch}
-        />
-        <SearchButton onClick={handleSearch} />
+        <div className="search-selection">
+          <Button
+            title={'Clear all selected'}
+            onClick={() => clearAll()}
+            disabled={selectedItems.length === 0}
+          />
+        </div>
+        <div className="search-container">
+          <SearchInput
+            searchQuery={searchQuery}
+            onChange={setSearchQuery}
+            onEnter={handleSearch}
+          />
+          <SearchButton onClick={handleSearch} />
+        </div>
       </div>
 
       <div className="search-body">
