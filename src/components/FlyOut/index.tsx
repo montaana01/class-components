@@ -1,6 +1,7 @@
 import Button from '../Button';
 import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 import { useRef } from 'react';
+import { ThemeSwitcher } from '../ThemeSwitcher';
 
 const flyOutConstants = {
   unselect: 'Unselect all',
@@ -58,6 +59,7 @@ export const FlyOut = () => {
           {flyOutConstants.download}
         </a>
       )}
+      <ThemeSwitcher />
     </div>
   );
 };

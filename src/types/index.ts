@@ -73,3 +73,10 @@ export type SearchInputProps = {
   onChange: (value: string) => void;
   onEnter: VoidFunction;
 };
+
+export type Theme = 'light' | 'dark';
+
+export type ThemeContextType = {
+  theme: Theme;
+  toggleTheme: VoidFunction;
+};
