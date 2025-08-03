@@ -95,7 +95,6 @@ export default function SearchContainer() {
     navigate(
       `/search?page=1${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
-    setTotalPages(1);
   }
 
   return (
