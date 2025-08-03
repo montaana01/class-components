@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import SearchContainer from './index';
 import { fetchApi } from '../../api/apiDriver';
 import { mockData } from '../../test-utils/mock-constants';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { fetchApi } from '../../api/apiDriver.ts';
 import SearchInput from '../Search/SearchInput';

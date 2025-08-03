@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import Container from './components/Container';
 import SearchContainer from './components/SearchContainer';
 import AboutApp from './components/features/AboutApp';

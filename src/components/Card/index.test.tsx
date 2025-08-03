@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import Card from './index';
 import SearchResult from '../Search/SearchResult';
 import { mockData } from '../../test-utils/mock-constants.ts';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 
 describe('Card Component', () => {
   it('does not render anchor when url is missing', () => {

@@ -1,6 +1,6 @@
 import Navigation from '../../Navigation';
 import { ErrorButton } from '../../error/ErrorButton';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 const mainHeading = 'Rick&Morty React App';
 

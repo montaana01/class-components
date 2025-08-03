@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import SearchResult from './index';
 import { mockData } from '../../../test-utils/mock-constants.ts';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 
 describe('SearchResult Component', () => {
   it('displays loading message when isLoading is true', () => {
