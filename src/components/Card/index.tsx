@@ -58,11 +58,11 @@ export default function Card({ cardOptions }: CardProps) {
         </div>
       </div>
       <div className={'card-checkbox'}>
-        <label htmlFor={cardOptions.name}>
+        <label htmlFor={cardOptions.id.toString()}>
           {isSelected ? inputTitle.removeItem : inputTitle.addItem}
         </label>
         <input
-          id={cardOptions.name}
+          id={cardOptions.id.toString()}
           type={'checkbox'}
           checked={isSelected}
           onChange={() => toggleItem(cardOptions)}
