@@ -6,17 +6,15 @@ import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
 import DetailedCard from '../DetailedCard';
+import { FlyOut } from '../FlyOut';
 import Button from '../Button';
 import type {
   CharacterDetail,
   FetchApiOptions,
   QueryParams,
 } from '../../types';
-import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 
 export default function SearchContainer() {
-  const { selectedItems, clearAll } = useSelectedItemsStore();
-
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -102,13 +100,7 @@ export default function SearchContainer() {
   return (
     <>
       <div className="search-header">
-        <div className="search-selection">
-          <Button
-            title={'Clear all selected'}
-            onClick={() => clearAll()}
-            disabled={selectedItems.length === 0}
-          />
-        </div>
+        <FlyOut />
         <div className="search-container">
           <SearchInput
             searchQuery={searchQuery}

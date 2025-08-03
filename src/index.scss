@@ -54,7 +54,7 @@ h1 {
   font-size: 2.2em;
 }
 
-button {
+button, .button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -208,6 +208,7 @@ button {
       display: flex;
       flex-direction: column-reverse;
       gap: 0.5rem;
+
       & > div {
         width: 100%;
         justify-content: space-around;
@@ -218,6 +219,7 @@ button {
       border-left: unset;
       padding-left: unset;
     }
+
     &-body {
       flex-direction: column;
     }
