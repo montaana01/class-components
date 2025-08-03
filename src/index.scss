@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--primary-background);
 }
 
 * {
@@ -54,10 +55,11 @@ h1 {
   font-size: 2.2em;
 }
 
-button, .button {
+button,
+.button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.5em 1em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -139,6 +141,7 @@ button, .button {
 
 .search {
   &-header {
+    min-height: 2.7rem;
     width: 100%;
     display: flex;
     gap: 1rem;
@@ -157,7 +160,7 @@ button, .button {
     display: flex;
     justify-content: flex-start;
     width: 50%;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   &-body {
@@ -207,7 +210,7 @@ button, .button {
       width: 100%;
       display: flex;
       flex-direction: column-reverse;
-      gap: 0.5rem;
+      gap: 1rem;
 
       & > div {
         width: 100%;
@@ -216,17 +219,43 @@ button, .button {
     }
 
     &-container {
-      border-left: unset;
       padding-left: unset;
+      border-left: unset;
+    }
+
+    &-selection {
+      padding-top: 1rem;
+      border-top: 1px solid var(--primary-text);
     }
 
     &-body {
       flex-direction: column;
     }
   }
-  .detail-panel {
-    border-left: none;
-    border-top: 1px solid #ddd;
-    padding-top: 1rem;
+  .detail {
+    &-panel {
+      border-left: none;
+      border-top: 1px solid #ddd;
+      padding: 1rem;
+    }
+
+    &-container {
+      max-width: 100%;
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+  .card {
+    border-radius: 0.5rem;
+    width: 8rem;
+    height: 10rem;
+    &:hover {
+      scale: 1.02;
+    }
+    &-list {
+      gap: 0.5rem;
+    }
   }
 }
