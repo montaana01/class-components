@@ -1,14 +1,13 @@
 import { useTheme } from '../../context/ThemeContext';
-import type { Theme } from '../../types';
 
 export const ThemeSwitcher = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="theme-switcher">
       <select
         value={theme}
-        onChange={(e) => setTheme(e.target.value as Theme)}
+        onChange={() => toggleTheme()}
         className="theme-select"
       >
         <option value="light">Light</option>

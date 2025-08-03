@@ -13,7 +13,7 @@
 
 [data-theme='light'] {
   --bg-color: #ffffff;
-  --text-color: #333333;
+  --text-color: #5998ff;
   --primary-color: #2563eb;
 }
 
@@ -280,4 +280,7 @@ button,
       gap: 0.5rem;
     }
   }
+}
+.theme-switcher{
+  height: 100%;
 }
