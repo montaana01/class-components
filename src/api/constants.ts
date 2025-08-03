@@ -1,1 +1,2 @@
-export const API_URL: string = 'https://pokeapi.co/api/v2';
+export const API_URL = 'https://rickandmortyapi.com/api';
+export const API_PATH = 'character';

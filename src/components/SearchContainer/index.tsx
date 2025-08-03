@@ -1,108 +1,165 @@
-import React from 'react';
-import { fetchAbilities, type PokeApiResponse } from '../../api/pokeApi';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { fetchApi } from '../../api/apiDriver.ts';
 import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
+import DetailedCard from '../DetailedCard';
+import Button from '../Button';
+import type {
+  CharacterDetail,
+  FetchApiOptions,
+  QueryParams,
+} from '../../types';
 
-export type ApiResponse = {
-  name: string;
-  url: string;
-};
+export default function SearchContainer() {
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-type State = {
-  searchQuery: string;
-  results: ApiResponse[];
-  isLoading: boolean;
-  error: string | null;
-  productsPerPage: number;
-  nextPageUrl?: string;
-  prevPageUrl?: string;
-};
+  const [recordsCount, setRecordsCount] = useState<number>(0);
+  const [records, setRecords] = useState<CharacterDetail[]>([]);
+  const query = useLocation();
+  const queryParams: QueryParams = query.search
+    .split('?')[1]
+    .split('&')
+    .reduce((acc, el) => {
+      const params = el.split('=');
+      acc[params[0]] = params[1];
+      return acc;
+    }, {});
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
 
-export default class SearchContainer extends React.Component {
-  state: State = {
-    searchQuery: '',
-    results: [],
-    isLoading: false,
-    error: null,
-    productsPerPage: 50,
-  };
-
-  componentDidMount() {
-    const savedQuery: string | null = localStorage.getItem('searchTerm');
-    if (savedQuery) {
-      this.setState({ searchQuery: savedQuery }, this.handleSearch);
-    } else {
-      this.handleSearch();
+  async function getProducts(options: FetchApiOptions) {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await fetchApi<CharacterDetail>(options)
+        .then((data) => {
+          setRecordsCount(data.info.count);
+          setTotalPages(data.info.pages);
+          setRecords(data.results);
+        })
+        .catch((error) => {
+          setError(error.message || 'Data fetch error');
+          setRecords([]);
+        })
+        .finally(() => setIsLoading(false));
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  handleSearch = async (paginationUrl?: string) => {
-    const query: string = this.state.searchQuery.trim().toLowerCase();
-    this.setState({ isLoading: true, error: null });
+  useEffect(() => {
+    navigate(
+      `/search?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
+    );
+    return () => {
+      setSearchQuery(searchQuery);
+    };
+  }, []);
 
-    try {
-      const data: PokeApiResponse = await fetchAbilities(
-        this.state.productsPerPage,
-        paginationUrl
-      );
-      const filtered: ApiResponse[] = data.results.filter((item: ApiResponse) =>
-        item.name.includes(query)
-      );
-      localStorage.setItem('searchTerm', query);
-      this.setState({ nextPageUrl: data.next });
-      this.setState({ prevPageUrl: data.previous });
-      this.setState({ results: filtered });
-    } finally {
-      this.setState({ isLoading: false });
+  useEffect(() => {
+    const trimmedQuery = searchQuery.trim();
+    setIsLoading(true);
+    setError(null);
+
+    let fetchOptions = {};
+    if (trimmedQuery !== '') {
+      fetchOptions = {
+        ...fetchOptions,
+        name: trimmedQuery,
+      };
     }
-  };
+    if (queryParams.page) {
+      fetchOptions = {
+        ...fetchOptions,
+        page: queryParams.page,
+      };
+    }
+    if (queryParams.active) {
+      fetchOptions = {
+        ...fetchOptions,
+        active: queryParams.active,
+      };
+    }
+    getProducts(fetchOptions).catch((error) => {
+      setError(error.message || 'Data fetch error');
+    });
+  }, [queryParams.page, queryParams.query]);
 
-  handleInputChange = (value: string) => {
-    this.setState({ searchQuery: value });
-  };
-
-  render() {
-    const { searchQuery, results, isLoading, error, nextPageUrl, prevPageUrl } =
-      this.state;
-
-    return (
-      <>
-        <SearchInput
-          searchQuery={searchQuery}
-          onChange={this.handleInputChange}
-          onEnter={() => this.handleSearch()}
-        />
-        <SearchButton
-          onClick={() => {
-            this.handleSearch();
-          }}
-        />
-        <SearchResult items={results} isLoading={isLoading} error={error} />
-        {!isLoading && (
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <button
-              onClick={() => this.handleSearch(prevPageUrl)}
-              disabled={!prevPageUrl}
-            >
-              ⇦
-            </button>
-            <button
-              onClick={() => this.handleSearch(nextPageUrl)}
-              disabled={!nextPageUrl}
-            >
-              ⇨
-            </button>
-          </div>
-        )}
-      </>
+  function handleSearch() {
+    console.log(searchQuery);
+    navigate(
+      `/search?page=1${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
   }
+
+  return (
+    <>
+      <div className="search-header">
+        <SearchInput
+          searchQuery={searchQuery}
+          onChange={setSearchQuery}
+          onEnter={handleSearch}
+        />
+        <SearchButton onClick={handleSearch} />
+      </div>
+
+      <div className="search-body">
+        <div className="search-panel">
+          <div className="pagination">
+            <Button
+              title={'⇦'}
+              onClick={() =>
+                navigate(
+                  `/search?page=${+(queryParams.page || 0) - 1}${
+                    searchQuery ? `&query=${searchQuery}` : ''
+                  }${queryParams.active ? `&active=${queryParams.active}` : ''}`
+                )
+              }
+              disabled={
+                !records || recordsCount === 1 || +(queryParams.page || 0) === 1
+              }
+            />
+            {Number(queryParams.page)} / {totalPages}
+            <Button
+              title={'⇨'}
+              onClick={() =>
+                navigate(
+                  `/search?page=${+(queryParams.page || 0) + 1}${
+                    searchQuery ? `&query=${searchQuery}` : ''
+                  }${queryParams.active ? `&active=${queryParams.active}` : ''}`
+                )
+              }
+              disabled={
+                !records ||
+                recordsCount <= 1 ||
+                +(queryParams.page || 0) === Math.floor(totalPages)
+              }
+            />
+          </div>
+
+          <SearchResult items={records} isLoading={isLoading} error={error} />
+        </div>
+
+        {queryParams.active && (
+          <div className="detail-panel">
+            <DetailedCard
+              name={queryParams.active}
+              onClose={() =>
+                navigate(
+                  `/search?page=${queryParams.page || 1}${
+                    searchQuery ? `&query=${searchQuery}` : ''
+                  }`
+                )
+              }
+            />
+          </div>
+        )}
+      </div>
+    </>
+  );
 }

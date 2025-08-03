@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import SearchResult from './index';
 import { mockData } from '../../../test-utils/mock-constants.ts';
+import { MemoryRouter } from 'react-router';
 
 describe('SearchResult Component', () => {
   it('displays loading message when isLoading is true', () => {
@@ -14,24 +15,26 @@ describe('SearchResult Component', () => {
     render(
       <SearchResult items={[]} isLoading={false} error="Failed to load" />
     );
-    expect(screen.getByText('Error: Failed to load')).toBeInTheDocument();
+    expect(
+      screen.getByText('Have some problems: Failed to load')
+    ).toBeInTheDocument();
   });
 
   it('displays "Nothing was found!(" when items is empty and not loading or error', () => {
     render(<SearchResult items={[]} isLoading={false} error={null} />);
-    expect(screen.getByText('Nothing was found!(')).toBeInTheDocument();
+    expect(screen.getByText(/nothing was found!/i)).toBeInTheDocument();
   });
 
   it('renders CardList when items are provided', () => {
     render(
-      <SearchResult items={mockData.results} isLoading={false} error={null} />
+      <MemoryRouter initialEntries={['/search?page=1']}>
+        <SearchResult items={mockData.results} isLoading={false} error={null} />
+      </MemoryRouter>
     );
-    const linkElements = screen.getAllByRole('link');
-    expect(linkElements).toHaveLength(mockData.results.length);
 
-    linkElements.forEach((element, index) => {
-      expect(element).toHaveTextContent(mockData.results[index].name);
-      expect(element).toHaveAttribute('href', mockData.results[index].url);
+    mockData.results.forEach((character) => {
+      const heading = screen.getByRole('heading', { name: character.name });
+      expect(heading).toBeInTheDocument();
     });
   });
 });

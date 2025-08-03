@@ -1,15 +1,25 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import Container from './components/Container';
-import './index.scss';
 import SearchContainer from './components/SearchContainer';
-import { ErrorButton } from './components/error/ErrorButton';
+import AboutApp from './components/features/AboutApp';
+import NotFound from './components/features/NotFound';
+import './index.scss';
+import MainPage from './components/features/MainPage';
 
 function App() {
   return (
-    <Container>
-      <h1>Class-component React App</h1>
-      <SearchContainer />
-      <ErrorButton />
-    </Container>
+    <BrowserRouter>
+      <Container>
+        <Routes>
+          <Route path="/" element={<MainPage />}>
+            <Route index element={<Navigate to={'search?page=1'} replace />} />
+            <Route path="search" element={<SearchContainer />} />
+            <Route path="about" element={<AboutApp />} />
+            <Route path={'*'} element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Container>
+    </BrowserRouter>
   );
 }
 

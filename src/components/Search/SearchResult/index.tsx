@@ -1,28 +1,32 @@
-import React from 'react';
 import CardList from '../../CardList';
+import isEmptyArray from '../../../helpers/isEmpty.ts';
+import type { SearchResultProps } from '../../../types';
 
-interface SearchResultProps {
-  items: { name: string; url: string }[];
-  isLoading: boolean;
-  error: string | null;
-}
+const SearchStateMessage: Record<string, string> = {
+  loading: 'Loading...',
+  error: 'Have some problems:',
+  notFound: 'Nothing was found!',
+};
 
-export default class SearchResult extends React.Component<SearchResultProps> {
-  render() {
-    const { items, isLoading, error } = this.props;
+export default function SearchResult({
+  items,
+  isLoading,
+  error,
+}: SearchResultProps) {
+  if (isLoading) {
+    return <p className="padding">{SearchStateMessage.loading}</p>;
+  }
 
-    if (isLoading) {
-      return <p className="padding">Loading...</p>;
-    }
-
-    if (error) {
-      return <p className="error">Error: {error}</p>;
-    }
-
-    if (items.length === 0) {
-      return <p className="padding">Nothing was found!(</p>;
-    }
-
+  if (error) {
+    return (
+      <p className="error">
+        {SearchStateMessage.error} {error}
+      </p>
+    );
+  }
+  if (isEmptyArray(items)) {
+    return <p className="padding">{SearchStateMessage.notFound}</p>;
+  } else {
     return <CardList items={items} />;
   }
 }
