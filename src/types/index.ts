@@ -16,17 +16,24 @@ export type ApiResponse<T> = {
 export type FetchApiOptions = {
   page?: string;
   name?: string;
-  active?: string;
+  id?: number;
 };
 
-export type QueryParams = { page?: number; query?: string; active?: string };
+export type QueryParams = { page?: number; query?: string; active?: number };
 
 export type CardProps = {
-  options: CharacterDetail;
+  cardOptions: CharacterDetail;
+};
+
+export type SelectedItemsState = {
+  selectedItems: CharacterDetail[];
+  toggleItem: (item: CharacterDetail) => void;
+  removeItem: (id: number) => void;
+  clearAll: VoidFunction;
 };
 
 export type DetailedCardProps = {
-  name: string;
+  id: number;
   onClose: VoidFunction;
 };
 
