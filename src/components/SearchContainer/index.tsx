@@ -13,6 +13,7 @@ import type {
   FetchApiOptions,
   QueryParams,
 } from '../../types';
+import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 
 export default function SearchContainer() {
   const [totalPages, setTotalPages] = useState(1);
@@ -32,6 +33,7 @@ export default function SearchContainer() {
     }, {});
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
+  const { selectedItems } = useSelectedItemsStore();
 
   async function getProducts(options: FetchApiOptions) {
     setIsLoading(true);
@@ -99,6 +101,11 @@ export default function SearchContainer() {
 
   return (
     <>
+      {selectedItems.length > 0 && (
+        <p className={'selection-items'}>
+          Selected items count: <strong>{selectedItems.length}</strong>
+        </p>
+      )}
       <div className="search-header">
         <FlyOut />
         <div className="search-container">
