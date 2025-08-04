@@ -8,7 +8,7 @@ export const ThemeSwitcher = () => {
       <select
         value={theme}
         onChange={() => toggleTheme()}
-        className="theme-select"
+        className="theme-select button"
       >
         <option value="light">Light</option>
         <option value="dark">Dark</option>

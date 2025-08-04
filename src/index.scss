@@ -40,7 +40,6 @@ body {
 
 html {
   scroll-behavior: smooth;
-  background: var(--primary-background);
 }
 
 * {
@@ -175,7 +174,7 @@ button,
     gap: 0.5rem;
     width: 50%;
     padding-left: 1rem;
-    border-left: 1px solid var(--primary-text);
+    border-left: 1px solid var(--primary-color);
   }
 
   &-selection {
@@ -247,7 +246,7 @@ button,
 
     &-selection {
       padding-top: 1rem;
-      border-top: 1px solid var(--primary-text);
+      border-top: 1px solid var(--primary-color);
     }
 
     &-body {
@@ -281,6 +280,7 @@ button,
     }
   }
 }
-.theme-switcher {
+.theme-select.button {
   height: 100%;
+  padding: unset;
 }
