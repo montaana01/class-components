@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import { fetchApi } from '../../api/apiDriver.ts';
-import type {
-  ApiResponse,
-  CharacterDetail,
-  DetailedCardProps,
-} from '../../types';
+import { fetchDetailedItemApi } from '../../api/apiDriver.ts';
+import type { CharacterDetail, DetailedCardProps } from '../../types';
 import Button from '../Button';
 
-export default function DetailedCard({ name, onClose }: DetailedCardProps) {
-  const [data, setData] = useState<ApiResponse<CharacterDetail>>();
+export default function DetailedCard({ id, onClose }: DetailedCardProps) {
+  const [data, setData] = useState<CharacterDetail>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +16,7 @@ export default function DetailedCard({ name, onClose }: DetailedCardProps) {
       setError(null);
 
       try {
-        const detail = await fetchApi<CharacterDetail>({ name: name });
+        const detail = await fetchDetailedItemApi<CharacterDetail>(id);
         setData(detail);
       } finally {
         setIsLoading(false);
@@ -28,7 +24,7 @@ export default function DetailedCard({ name, onClose }: DetailedCardProps) {
     }
 
     void loadDetail();
-  }, [name]);
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -51,53 +47,45 @@ export default function DetailedCard({ name, onClose }: DetailedCardProps) {
     return null;
   }
 
-  const detailedItem: CharacterDetail = data.results[0];
-
   return (
     <div className="detail-container">
       {closeButton}
-      <img src={detailedItem.image} alt={detailedItem.name} />
+      <h3>
+        <strong>{data.name}</strong>{' '}
+      </h3>
+      <img src={data.image} alt={data.name} />
       <p>
         <strong>Status:</strong>{' '}
-        {detailedItem.status == 'unknown'
-          ? 'No information'
-          : detailedItem.status}
+        {data.status == 'unknown' ? 'No information' : data.status}
       </p>
       <p>
         <strong>Species:</strong>{' '}
-        {detailedItem.species == 'unknown'
-          ? 'No information'
-          : detailedItem.species}
+        {data.species == 'unknown' ? 'No information' : data.species}
       </p>
-      {detailedItem.type && (
+      {data.type && (
         <p>
-          <strong>Type:</strong> {detailedItem.type}
+          <strong>Type:</strong> {data.type}
         </p>
       )}
       <p>
         <strong>Gender:</strong>{' '}
-        {detailedItem.gender == 'unknown'
-          ? 'No information'
-          : detailedItem.gender}
+        {data.gender == 'unknown' ? 'No information' : data.gender}
       </p>
       <p>
         <strong>Origin:</strong>{' '}
-        {detailedItem.origin.name == 'unknown'
-          ? 'No information'
-          : detailedItem.origin.name}
+        {data.origin.name == 'unknown' ? 'No information' : data.origin.name}
       </p>
       <p>
         <strong>Location:</strong>{' '}
-        {detailedItem.location.name == 'unknown'
+        {data.location.name == 'unknown'
           ? 'No information'
-          : detailedItem.location.name}
+          : data.location.name}
       </p>
       <p>
-        <strong>Episodes:</strong> {detailedItem.episode.length}
+        <strong>Episodes:</strong> {data.episode.length}
       </p>
       <p>
-        <strong>Created:</strong>{' '}
-        {new Date(detailedItem.created).toLocaleDateString()}
+        <strong>Created:</strong> {new Date(data.created).toLocaleDateString()}
       </p>
     </div>
   );

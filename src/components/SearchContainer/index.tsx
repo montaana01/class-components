@@ -6,12 +6,14 @@ import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
 import SearchResult from '../Search/SearchResult';
 import DetailedCard from '../DetailedCard';
+import { FlyOut } from '../FlyOut';
 import Button from '../Button';
 import type {
   CharacterDetail,
   FetchApiOptions,
   QueryParams,
 } from '../../types';
+import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 
 export default function SearchContainer() {
   const [totalPages, setTotalPages] = useState(1);
@@ -31,6 +33,7 @@ export default function SearchContainer() {
     }, {});
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
+  const { selectedItems } = useSelectedItemsStore();
 
   async function getProducts(options: FetchApiOptions) {
     setIsLoading(true);
@@ -90,22 +93,29 @@ export default function SearchContainer() {
     });
   }, [queryParams.page, queryParams.query]);
 
-  function handleSearch() {
-    console.log(searchQuery);
+  const handleSearch: VoidFunction = () => {
     navigate(
       `/search?page=1${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
     );
-  }
+  };
 
   return (
     <>
+      {selectedItems.length > 0 && (
+        <p className={'selection-items'}>
+          Selected items count: <strong>{selectedItems.length}</strong>
+        </p>
+      )}
       <div className="search-header">
-        <SearchInput
-          searchQuery={searchQuery}
-          onChange={setSearchQuery}
-          onEnter={handleSearch}
-        />
-        <SearchButton onClick={handleSearch} />
+        <FlyOut />
+        <div className="search-container">
+          <SearchInput
+            searchQuery={searchQuery}
+            onChange={setSearchQuery}
+            onEnter={handleSearch}
+          />
+          <SearchButton onClick={handleSearch} />
+        </div>
       </div>
 
       <div className="search-body">
@@ -148,7 +158,7 @@ export default function SearchContainer() {
         {queryParams.active && (
           <div className="detail-panel">
             <DetailedCard
-              name={queryParams.active}
+              id={queryParams.active}
               onClose={() =>
                 navigate(
                   `/search?page=${queryParams.page || 1}${
