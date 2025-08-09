@@ -1,32 +1,19 @@
-import { useEffect, useState } from 'react';
 import { fetchDetailedItemApi } from '../../api/apiDriver.ts';
 import type { CharacterDetail, DetailedCardProps } from '../../types';
 import Button from '../Button';
+import { useQuery } from '@tanstack/react-query';
 
 export default function DetailedCard({ id, onClose }: DetailedCardProps) {
-  const [data, setData] = useState<CharacterDetail>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
   const closeButton = <Button title={'× Close'} onClick={onClose} />;
 
-  useEffect(() => {
-    async function loadDetail() {
-      setIsLoading(true);
-      setError(null);
+  const { isPending, error, data, isFetching } = useQuery({
+    queryKey: ['characterDetail', id],
+    queryFn: async () => {
+      return await fetchDetailedItemApi<CharacterDetail>(id);
+    },
+  });
 
-      try {
-        const detail = await fetchDetailedItemApi<CharacterDetail>(id);
-        setData(detail);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    void loadDetail();
-  }, [id]);
-
-  if (isLoading) {
+  if (isPending || isFetching) {
     return (
       <div className="detail-container">
         {closeButton}
@@ -38,7 +25,7 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
   if (error) {
     return (
       <div className="detail-container">
-        <p className="error">Error: {error}</p>
+        <p className="error">Error: {error.message}</p>
       </div>
     );
   }

@@ -5,21 +5,31 @@ import AboutApp from './components/features/AboutApp';
 import NotFound from './components/features/NotFound';
 import './index.scss';
 import MainPage from './components/features/MainPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter>
-      <Container>
-        <Routes>
-          <Route path="/" element={<MainPage />}>
-            <Route index element={<Navigate to={'search?page=1'} replace />} />
-            <Route path="search" element={<SearchContainer />} />
-            <Route path="about" element={<AboutApp />} />
-            <Route path={'*'} element={<NotFound />} />
-          </Route>
-        </Routes>
-      </Container>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <BrowserRouter>
+        <Container>
+          <Routes>
+            <Route path="/" element={<MainPage />}>
+              <Route
+                index
+                element={<Navigate to={'search?page=1'} replace />}
+              />
+              <Route path="search" element={<SearchContainer />} />
+              <Route path="about" element={<AboutApp />} />
+              <Route path={'*'} element={<NotFound />} />
+            </Route>
+          </Routes>
+        </Container>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
