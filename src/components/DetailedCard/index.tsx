@@ -4,9 +4,6 @@ import Button from '../Button';
 import { useQuery } from '@tanstack/react-query';
 
 export default function DetailedCard({ id, onClose }: DetailedCardProps) {
-  // const [data, setData] = useState<CharacterDetail>();
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  //const [error, setError] = useState<string | null>(null);
   const closeButton = <Button title={'× Close'} onClick={onClose} />;
 
   const { isPending, error, data, isFetching } = useQuery({
@@ -15,22 +12,6 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
       return await fetchDetailedItemApi<CharacterDetail>(id);
     },
   });
-
-  // useEffect(() => {
-  //   async function loadDetail() {
-  //     setIsLoading(true);
-  //     setError(null);
-  //
-  //     try {
-  //       const detail = await fetchDetailedItemApi<CharacterDetail>(id);
-  //       setData(detail);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //
-  //   void loadDetail();
-  // }, [id]);
 
   if (isPending || isFetching) {
     return (
