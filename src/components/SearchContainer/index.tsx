@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import isEmptyArray from '../../helpers/isEmpty';
@@ -9,95 +9,65 @@ import SearchResult from '../Search/SearchResult';
 import DetailedCard from '../DetailedCard';
 import { FlyOut } from '../FlyOut';
 import Button from '../Button';
-import type {
-  CharacterDetail,
-  FetchApiOptions,
-  QueryParams,
-} from '../../types';
+import type { CharacterDetail, QueryParams } from '../../types';
 import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
+import { parseQueryParams } from '../../helpers/parseQueryParams';
+import { useQuery } from '@tanstack/react-query';
 
 export default function SearchContainer() {
-  const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [recordsCount, setRecordsCount] = useState<number>(0);
-  const [records, setRecords] = useState<CharacterDetail[]>([]);
   const query = useLocation();
-  const queryParams: QueryParams = query.search
-    .split('?')[1]
-    .split('&')
-    .reduce((acc, el) => {
-      const params = el.split('=');
-      acc[params[0]] = params[1];
-      return acc;
-    }, {});
+  const queryParams: QueryParams = parseQueryParams(query.search);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
   const { selectedItems } = useSelectedItemsStore();
 
-  async function getProducts(options: FetchApiOptions) {
-    setIsLoading(true);
-    setError(null);
-    try {
-      await fetchApi<CharacterDetail>(options)
-        .then((data) => {
-          setRecordsCount(data.info.count);
-          setTotalPages(data.info.pages);
-          setRecords(data.results);
-        })
-        .catch((error) => {
-          setError(error.message || 'Data fetch error');
-          setRecords([]);
-        })
-        .finally(() => setIsLoading(false));
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const { data, isLoading, isError, error, isFetching } = useQuery({
+    queryKey: ['characters', queryParams, queryParams.query],
+    queryFn: () =>
+      fetchApi<CharacterDetail>({
+        ...queryParams,
+        query: queryParams.query || undefined,
+      }),
+  });
 
   useEffect(() => {
-    navigate(
-      `/search?${queryParams.page ? 'page=' + queryParams.page : ''}${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
-    );
-    return () => {
-      setSearchQuery(searchQuery);
-    };
-  }, []);
-
-  useEffect(() => {
-    const trimmedQuery = searchQuery.trim();
-    setIsLoading(true);
-    setError(null);
-
-    let fetchOptions = {};
-    if (trimmedQuery !== '') {
-      fetchOptions = {
-        ...fetchOptions,
-        name: trimmedQuery,
-      };
+    if (searchQuery !== queryParams.query) {
+      const params = new URLSearchParams(location.search);
+      if (searchQuery) {
+        params.set('query', searchQuery);
+      } else {
+        params.delete('query');
+      }
+      navigate(`/search?${params.toString()}`, { replace: true });
     }
-    if (queryParams.page) {
-      fetchOptions = {
-        ...fetchOptions,
-        page: queryParams.page,
-      };
-    }
-    if (queryParams.active) {
-      fetchOptions = {
-        ...fetchOptions,
-        active: queryParams.active,
-      };
-    }
-    getProducts(fetchOptions).catch((error) => {
-      setError(error.message || 'Data fetch error');
-    });
-  }, [queryParams.page, queryParams.query]);
+  }, [searchQuery]);
 
-  const handleSearch: VoidFunction = () => {
-    navigate(
-      `/search?page=1${searchQuery ? '&query=' + searchQuery : ''}${queryParams.active ? '&active=' + queryParams.active : ''}`
-    );
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    params.set('page', '1');
+    if (searchQuery) params.set('query', searchQuery);
+    if (queryParams.active) params.set('active', queryParams.active.toString());
+
+    navigate(`/search?${params.toString()}`);
+  };
+
+  const handlePageChange = (direction: 'prev' | 'next') => {
+    const newPage =
+      direction === 'prev'
+        ? (queryParams.page || 1) - 1
+        : (queryParams.page || 0) + 1;
+    const params = new URLSearchParams();
+    params.set('page', newPage.toString());
+    if (queryParams.query) params.set('query', queryParams.query);
+    if (queryParams.active) params.set('active', queryParams.active.toString());
+
+    navigate(`/search?${params.toString()}`);
+  };
+
+  const handleCloseCard = () => {
+    const params = new URLSearchParams(location.search);
+    params.delete('active');
+    navigate(`/search?${params.toString()}`);
   };
 
   return (
@@ -124,50 +94,27 @@ export default function SearchContainer() {
           <div className="pagination">
             <Button
               title={'⇦'}
-              onClick={() =>
-                navigate(
-                  `/search?page=${+(queryParams.page || 0) - 1}${
-                    searchQuery ? `&query=${searchQuery}` : ''
-                  }${queryParams.active ? `&active=${queryParams.active}` : ''}`
-                )
-              }
-              disabled={
-                !records || recordsCount === 1 || +(queryParams.page || 0) === 1
-              }
+              onClick={() => handlePageChange('prev')}
+              disabled={!data || queryParams.page === 1}
             />
-            {Number(queryParams.page)} / {totalPages}
+            {queryParams.page} / {data?.info.pages || 1}
             <Button
               title={'⇨'}
-              onClick={() =>
-                navigate(
-                  `/search?page=${+(queryParams.page || 0) + 1}${
-                    searchQuery ? `&query=${searchQuery}` : ''
-                  }${queryParams.active ? `&active=${queryParams.active}` : ''}`
-                )
-              }
-              disabled={
-                !records ||
-                recordsCount <= 1 ||
-                +(queryParams.page || 0) === Math.floor(totalPages)
-              }
+              onClick={() => handlePageChange('next')}
+              disabled={!data || queryParams.page === (data?.info.pages || 1)}
             />
           </div>
 
-          <SearchResult items={records} isLoading={isLoading} error={error} />
+          <SearchResult
+            items={data?.results || []}
+            isLoading={isLoading || isFetching}
+            error={isError ? error.message : null}
+          />
         </div>
 
         {queryParams.active && (
           <div className="detail-panel">
-            <DetailedCard
-              id={queryParams.active}
-              onClose={() =>
-                navigate(
-                  `/search?page=${queryParams.page || 1}${
-                    searchQuery ? `&query=${searchQuery}` : ''
-                  }`
-                )
-              }
-            />
+            <DetailedCard id={queryParams.active} onClose={handleCloseCard} />
           </div>
         )}
       </div>
