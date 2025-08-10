@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import isEmptyArray from '../../helpers/isEmpty.ts';
 import { fetchApi } from '../../api/apiDriver.ts';
 import SearchInput from '../Search/SearchInput';
 import SearchButton from '../Search/SearchButton';
@@ -101,7 +102,7 @@ export default function SearchContainer() {
 
   return (
     <>
-      {selectedItems.length > 0 && (
+      {!isEmptyArray(selectedItems) && (
         <p className={'selection-items'}>
           Selected items count: <strong>{selectedItems.length}</strong>
         </p>
