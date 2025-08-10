@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import isEmptyArray from '../../helpers/isEmpty';
@@ -14,40 +14,29 @@ import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 import { parseQueryParams } from '../../helpers/parseQueryParams';
 import { useQuery } from '@tanstack/react-query';
 
-export default function SearchContainer() {
+export default memo(function SearchContainer() {
   const query = useLocation();
-  const queryParams: QueryParams = parseQueryParams(query.search);
+  const queryParams: QueryParams = useMemo(
+    () => parseQueryParams(query.search),
+    [query.search]
+  );
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
   const { selectedItems } = useSelectedItemsStore();
 
   const { data, isLoading, isError, error, isFetching } = useQuery({
-    queryKey: ['characters', queryParams, queryParams.query],
+    queryKey: ['characters', queryParams.page, queryParams.query, queryParams],
     queryFn: () =>
       fetchApi<CharacterDetail>({
-        ...queryParams,
+        page: queryParams.page,
         query: queryParams.query || undefined,
       }),
   });
-
-  useEffect(() => {
-    if (searchQuery !== queryParams.query) {
-      const params = new URLSearchParams(location.search);
-      if (searchQuery) {
-        params.set('query', searchQuery);
-      } else {
-        params.delete('query');
-      }
-      navigate(`/search?${params.toString()}`, { replace: true });
-    }
-  }, [searchQuery]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
     params.set('page', '1');
     if (searchQuery) params.set('query', searchQuery);
-    if (queryParams.active) params.set('active', queryParams.active.toString());
-
     navigate(`/search?${params.toString()}`);
   };
 
@@ -120,4 +109,4 @@ export default function SearchContainer() {
       </div>
     </>
   );
-}
+});
