@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import './card.scss';
 import { useLocation, useNavigate } from 'react-router';
 import type { CardProps, CharacterDetail, QueryParams } from '../../types';
@@ -9,7 +10,7 @@ const inputTitle = {
   removeItem: 'Remove this Item!',
 };
 
-export default function Card({ cardOptions }: CardProps) {
+export default memo(function Card({ cardOptions }: CardProps) {
   const navigate = useNavigate();
   const query = useLocation();
   const queryParams: QueryParams = parseQueryParams(query.search);
@@ -66,4 +67,4 @@ export default function Card({ cardOptions }: CardProps) {
       </div>
     </div>
   );
-}
+});
