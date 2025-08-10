@@ -2,7 +2,7 @@ import Button from '../Button';
 import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 import { useRef } from 'react';
 import { ThemeSwitcher } from '../ThemeSwitcher';
-import isEmptyArray from '../../helpers/isEmpty.ts';
+import isEmptyArray from '../../helpers/isEmpty';
 
 const flyOutConstants = {
   unselect: 'Unselect all',
