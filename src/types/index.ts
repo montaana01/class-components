@@ -13,11 +13,7 @@ export type ApiResponse<T> = {
   results: T[];
 };
 
-export type FetchApiOptions = {
-  page?: string;
-  name?: string;
-  id?: number;
-};
+export type FetchApiOptions = QueryParams;
 
 export type QueryParams = { page?: number; query?: string; active?: number };
 
