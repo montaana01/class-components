@@ -24,7 +24,7 @@ export default memo(function SearchContainer() {
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
   const { selectedItems } = useSelectedItemsStore();
 
-  const { data, isLoading, isError, error, isFetching } = useQuery({
+  const { data, isLoading, isError, error, isFetching, refetch } = useQuery({
     queryKey: ['characters', queryParams.page, queryParams.query],
     queryFn: () =>
       fetchApi<CharacterDetail>({
@@ -59,6 +59,10 @@ export default memo(function SearchContainer() {
     navigate(`/search?${params.toString()}`);
   };
 
+  const handleRefetch = async () => {
+    refetch().catch((error) => console.error(error));
+  };
+
   return (
     <>
       {!isEmptyArray(selectedItems) && (
@@ -75,6 +79,7 @@ export default memo(function SearchContainer() {
             onEnter={handleSearch}
           />
           <SearchButton onClick={handleSearch} />
+          <Button title="Refresh" onClick={handleRefetch} />
         </div>
       </div>
 
