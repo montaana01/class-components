@@ -25,7 +25,7 @@ export default memo(function SearchContainer() {
   const { selectedItems } = useSelectedItemsStore();
 
   const { data, isLoading, isError, error, isFetching } = useQuery({
-    queryKey: ['characters', queryParams.page, queryParams.query, queryParams],
+    queryKey: ['characters', queryParams.page, queryParams.query],
     queryFn: () =>
       fetchApi<CharacterDetail>({
         page: queryParams.page,
