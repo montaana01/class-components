@@ -101,11 +101,11 @@ export default memo(function SearchContainer() {
           />
         </div>
 
-        {queryParams.active && (
+        {queryParams.active ? (
           <div className="detail-panel">
             <DetailedCard id={queryParams.active} onClose={handleCloseCard} />
           </div>
-        )}
+        ) : null}
       </div>
     </>
   );
