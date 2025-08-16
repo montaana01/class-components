@@ -1,5 +1,5 @@
 import CardList from '../../CardList';
-import isEmptyArray from '../../../helpers/isEmpty.ts';
+import isEmptyArray from '../../../helpers/isEmpty';
 import type { SearchResultProps } from '../../../types';
 
 const SearchStateMessage: Record<string, string> = {

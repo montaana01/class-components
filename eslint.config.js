@@ -6,11 +6,13 @@ import react from 'eslint-plugin-react';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import reactCompiler from 'eslint-plugin-react-compiler';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config(
   { ignores: ['dist'] },
   {
     extends: [
+      ...pluginQuery.configs['flat/recommended'],
       js.configs.recommended,
       ...tseslint.configs.strict,
       eslintPluginPrettier,

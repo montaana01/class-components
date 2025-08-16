@@ -2,6 +2,7 @@ import Button from '../Button';
 import { useSelectedItemsStore } from '../../store/selectedItemsStore.ts';
 import { useRef } from 'react';
 import { ThemeSwitcher } from '../ThemeSwitcher';
+import isEmptyArray from '../../helpers/isEmpty';
 
 const flyOutConstants = {
   unselect: 'Unselect all',
@@ -48,9 +49,9 @@ export const FlyOut = () => {
       <Button
         title={flyOutConstants.unselect}
         onClick={() => clearAll()}
-        disabled={selectedItems.length === 0}
+        disabled={isEmptyArray(selectedItems)}
       />
-      {selectedItems.length > 0 && (
+      {!isEmptyArray(selectedItems) && (
         <a
           className={'button'}
           ref={downloadRef}

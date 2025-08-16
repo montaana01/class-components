@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import isEmptyArray from './isEmpty';
+import isEmptyArray from './index.ts';
 
 describe('isEmptyArray', () => {
   it('returns true for an empty array', () => {

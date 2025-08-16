@@ -6,10 +6,18 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import SearchContainer from './index';
 import { fetchApi } from '../../api/apiDriver';
 import { mockData } from '../../test-utils/mock-constants';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('../../api/apiDriver', () => ({
   fetchApi: vi.fn(),
 }));
+
+function renderWithProviders(elements: React.ReactElement) {
+  const queryClient = new QueryClient();
+  return render(
+    <QueryClientProvider client={queryClient}>{elements}</QueryClientProvider>
+  );
+}
 
 describe('SearchContainer', () => {
   beforeEach(() => {
@@ -22,18 +30,21 @@ describe('SearchContainer', () => {
     const fetchApiMock = vi.mocked(fetchApi);
     fetchApiMock.mockResolvedValue(mockData);
 
-    render(
+    renderWithProviders(
       <MemoryRouter initialEntries={['/search?page=1']}>
         <Routes>
           <Route path="/search" element={<SearchContainer />} />
         </Routes>
       </MemoryRouter>
     );
+
     expect(screen.getByText('Loading...')).toBeInTheDocument();
+
     await waitFor(() => {
       expect(screen.getByText(mockData.results[0].name)).toBeInTheDocument();
       expect(screen.getByText(mockData.results[10].name)).toBeInTheDocument();
     });
+
     expect(localStorage.getItem('searchTerm')).toBe('');
   });
 
@@ -47,7 +58,7 @@ describe('SearchContainer', () => {
     const fetchApiMock = vi.mocked(fetchApi);
     fetchApiMock.mockResolvedValue(filteredData);
 
-    render(
+    renderWithProviders(
       <MemoryRouter initialEntries={['/search?page=1']}>
         <Routes>
           <Route path="/search" element={<SearchContainer />} />
@@ -69,7 +80,7 @@ describe('SearchContainer', () => {
     const fetchApiMock = vi.mocked(fetchApi);
     fetchApiMock.mockResolvedValue(mockData);
 
-    render(
+    renderWithProviders(
       <MemoryRouter initialEntries={['/search?page=1']}>
         <Routes>
           <Route path="/search" element={<SearchContainer />} />
