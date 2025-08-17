@@ -9,7 +9,16 @@ import reactCompiler from 'eslint-plugin-react-compiler';
 import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  {
+    ignores: [
+      '.next/**',
+      '**/*.d.ts',
+      'node_modules/',
+      'dist/',
+      'build/',
+      'coverage/',
+    ],
+  },
   {
     extends: [
       ...pluginQuery.configs['flat/recommended'],
@@ -32,7 +41,10 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+          allowExportNames: ['config', 'metadata'],
+        },
       ],
       'react-compiler/react-compiler': 'error',
       ...react.configs.recommended.rules,
