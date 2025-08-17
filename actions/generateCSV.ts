@@ -1,0 +1,30 @@
+'use server';
+
+import { type CharacterDetail } from '@/types';
+
+export const generateCsv = async (selectedItems: CharacterDetail[]) => {
+  const headers = [
+    'Name',
+    'Image',
+    'Status',
+    'Species',
+    'Type',
+    'Gender',
+    'Origin',
+    'Location',
+    'Episodes',
+    'Created',
+  ];
+
+  return [
+    headers.join(','),
+    ...selectedItems.map(
+      (item) =>
+        `"${item.name}","${item.image}","${item.status == 'unknown' ? 'No information' : item.status}","${item.species == 'unknown' ? 'No information' : item.species}","${item.type ?? 'No information'}","${item.gender == 'unknown' ? 'No information' : item.gender}","${item.origin.name == 'unknown' ? 'No information' : item.origin.name}","${
+          item.location.name == 'unknown'
+            ? 'No information'
+            : item.location.name
+        }","${item.url}","${item.episode.length}","${new Date(item.created).toLocaleDateString()}"`
+    ),
+  ].join('\n');
+};
