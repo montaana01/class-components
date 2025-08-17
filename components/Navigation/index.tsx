@@ -10,17 +10,18 @@ export default function Navigation() {
 
   return (
     <nav>
-      <ul>
-        <li>
+      <ul className="nav-list">
+        <li className="nav-item">
           <Link
             href="/search"
-            className={pathname === '/search' ? 'active' : ''}
+            className={pathname.includes('search') ? 'nav-link active' : 'nav-link'}
+
           >
             {t('search')}
           </Link>
         </li>
-        <li>
-          <Link href="/about" className={pathname === '/about' ? 'active' : ''}>
+        <li className="nav-item">
+          <Link href="/about" className={pathname.includes('about') ? 'nav-link active' : 'nav-link'}>
             {t('about')}
           </Link>
         </li>
