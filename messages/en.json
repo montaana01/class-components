@@ -1,0 +1,34 @@
+{
+  "Index": {
+    "title": "Rick&Morty React App",
+    "selectedItems": "Selected items count:",
+    "searchPlaceholder": "Search characters...",
+    "refresh": "Refresh",
+    "search": "Search"
+  },
+  "About": {
+    "title": "About this App",
+    "author": "Author: Alexey Yakovlev",
+    "buttonTitle": "← Back to Search"
+  },
+  "Navigation": {
+    "search": "Search",
+    "about": "About"
+  },
+  "Card": {
+    "statusUnknown": "Status unknown",
+    "locationUnknown": "Unknown location",
+    "from": "From",
+    "episodesCount": "🎬 Appears in {count} episodes",
+    "addItem": "Add this Item!",
+    "removeItem": "Remove this Item!"
+  },
+  "FlyOut": {
+    "unselect": "Unselect all",
+    "download": "Download"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "buttonTitle": "Go Back!"
+  }
+}
