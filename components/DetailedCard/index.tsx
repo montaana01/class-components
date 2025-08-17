@@ -43,7 +43,13 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
       <h3>
         <strong>{data.name}</strong>{' '}
       </h3>
-      <Image src={data.image} alt={data.name} width={30} height={30} priority />
+      <Image
+        src={data.image}
+        alt={data.name}
+        width={200}
+        height={200}
+        priority
+      />
       <p>
         <strong>Status:</strong>{' '}
         {data.status == 'unknown' ? 'No information' : data.status}
