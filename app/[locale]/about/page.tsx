@@ -1,9 +1,15 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Container from '@/components/Container';
-import Link from 'next/link';
 
 export default function AboutApp() {
   const t = useTranslations('About');
+  const router = useRouter();
+
+  const handleBackClick = () => router.back();
+
   return (
     <Container>
       <div className="about">
@@ -20,8 +26,10 @@ export default function AboutApp() {
           </a>
           ]
         </p>
-        <Link href="/">{t('buttonTitle')}</Link>
-      </div>{' '}
+        <button type="button" onClick={handleBackClick}>
+          {t('buttonTitle')}
+        </button>
+      </div>
     </Container>
   );
 }
