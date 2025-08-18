@@ -5,7 +5,9 @@ import './globals.scss';
 import { NextIntlClientProvider } from 'next-intl';
 
 export default async function RootLayout({ children, params }: LayoutProps) {
-  const { locale } = params;
+  const resolved = params ? await params : { locale: 'en' };
+  const { locale } = resolved;
+
   const messages = await getMessages({ locale });
   return (
     <html lang={locale} data-scroll-behavior="smooth">

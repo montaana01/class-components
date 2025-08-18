@@ -81,8 +81,8 @@ export type ThemeContextType = {
 };
 
 export type LayoutProps = {
+  params?: Promise<{ locale: string }>;
   children: ReactNode;
-  params: { locale: string };
 };
 
 export type SearchPageProps = {
