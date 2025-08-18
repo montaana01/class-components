@@ -1,0 +1,59 @@
+{
+  "Index": {
+    "title": "Rick&Morty React App",
+    "selectedItems": "Selected items count:",
+    "searchPlaceholder": "Search characters...",
+    "refresh": "Refresh",
+    "search": "Search"
+  },
+  "About": {
+    "title": "About this App",
+    "author": "Author: Alexey Yakovlev",
+    "buttonTitle": "← Back to Search"
+  },
+  "Navigation": {
+    "search": "Search",
+    "about": "About"
+  },
+  "Card": {
+    "statusUnknown": "Status unknown",
+    "locationUnknown": "Unknown location",
+    "from": "From",
+    "episodesCount": "🎬 Appears in {count} episodes",
+    "addItem": "Add this Item!",
+    "removeItem": "Remove this Item!"
+  },
+  "FlyOut": {
+    "unselect": "Unselect all",
+    "download": "Download"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "buttonTitle": "Go Back!"
+  },
+  "Theme": {
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "Close": {
+    "close": "Close"
+  },
+  "Error": {
+    "errorButtonText": "Set Error",
+    "errorMessage": "Test error from ErrorButton"
+  },
+  "DetailedCard": {
+    "close": "Close",
+    "loading": "Loading details…",
+    "error": "Error: {message}",
+    "status": "Status",
+    "species": "Species",
+    "type": "Type",
+    "gender": "Gender",
+    "origin": "Origin",
+    "location": "Location",
+    "episodes": "Episodes",
+    "created": "Created",
+    "noInformation": "No information"
+  }
+}
