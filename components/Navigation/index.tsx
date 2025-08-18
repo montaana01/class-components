@@ -14,14 +14,20 @@ export default function Navigation() {
         <li className="nav-item">
           <Link
             href="/search"
-            className={pathname.includes('search') ? 'nav-link active' : 'nav-link'}
-
+            className={
+              pathname.includes('search') ? 'nav-link active' : 'nav-link'
+            }
           >
             {t('search')}
           </Link>
         </li>
         <li className="nav-item">
-          <Link href="/about" className={pathname.includes('about') ? 'nav-link active' : 'nav-link'}>
+          <Link
+            href="/about"
+            className={
+              pathname.includes('about') ? 'nav-link active' : 'nav-link'
+            }
+          >
             {t('about')}
           </Link>
         </li>

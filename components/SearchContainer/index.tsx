@@ -21,7 +21,6 @@ export default memo(function SearchContainer() {
   const searchParams = useSearchParams();
   const t = useTranslations('Index');
 
-  // Получаем параметры из URL
   const pageParam = searchParams.get('page');
   const queryParam = searchParams.get('query');
   const activeParam = searchParams.get('active');
@@ -29,12 +28,10 @@ export default memo(function SearchContainer() {
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
   const { selectedItems } = useSelectedItemsStore();
 
-  // Парсим параметры
   const page = pageParam ? Number(pageParam) : 1;
   const query = queryParam || '';
   const active = activeParam || '';
 
-  // Синхронизируем состояние поиска с параметром запроса
   useEffect(() => {
     if (query) {
       setSearchQuery(query);
