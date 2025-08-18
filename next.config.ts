@@ -1,16 +1,14 @@
 import createNextIntlPlugin from 'next-intl/plugin';
-import type { NextConfig } from 'next';
+const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
-const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
-
-const nextConfig: NextConfig = {
+const nextConfig = {
   sassOptions: {
     includePaths: ['./components'],
   },
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
+        protocol: 'https' as const,
         hostname: 'rickandmortyapi.com',
         pathname: '/api/character/avatar/**',
       },

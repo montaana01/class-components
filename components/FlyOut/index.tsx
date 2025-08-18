@@ -7,6 +7,7 @@ import { ThemeSwitcher } from '../ThemeSwitcher';
 import isEmptyArray from '@/helpers/isEmpty';
 import { useTranslations } from 'next-intl';
 import { generateCsv } from '@/actions/generateCSV';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export const FlyOut = () => {
   const t = useTranslations('FlyOut');
@@ -41,6 +42,7 @@ export const FlyOut = () => {
       )}
       <a ref={downloadRef} style={{ display: 'none' }} />
       <ThemeSwitcher />
+      <LanguageSwitcher />
     </div>
   );
 };

@@ -5,9 +5,23 @@ import type { CharacterDetail, DetailedCardProps } from '@/types';
 import Button from '../Button';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export default function DetailedCard({ id, onClose }: DetailedCardProps) {
-  const closeButton = <Button title={'× Close'} onClick={onClose} />;
+  const t = useTranslations('DetailedCard');
+
+  const fieldLabels = {
+    status: t('status'),
+    species: t('species'),
+    type: t('type'),
+    gender: t('gender'),
+    origin: t('origin'),
+    location: t('location'),
+    episodes: t('episodes'),
+    created: t('created'),
+  };
+
+  const closeButton = <Button title={`× ${t('close')}`} onClick={onClose} />;
 
   const { isPending, error, data, isFetching } = useQuery({
     queryKey: ['characterDetail', id],
@@ -20,7 +34,7 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
     return (
       <div className="detail-container">
         {closeButton}
-        <p>Loading details…</p>
+        <p>{t('loading')}</p>
       </div>
     );
   }
@@ -28,7 +42,8 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
   if (error) {
     return (
       <div className="detail-container">
-        <p className="error">Error: {error.message}</p>
+        {closeButton}
+        <p className="error">{t('error', { message: error.message })}</p>
       </div>
     );
   }
@@ -37,11 +52,15 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
     return null;
   }
 
+  const formatValue = (value: string) => {
+    return value === 'unknown' ? t('noInformation') : value;
+  };
+
   return (
     <div className="detail-container">
       {closeButton}
       <h3>
-        <strong>{data.name}</strong>{' '}
+        <strong>{data.name}</strong>
       </h3>
       <Image
         src={data.image}
@@ -50,38 +69,34 @@ export default function DetailedCard({ id, onClose }: DetailedCardProps) {
         height={200}
         priority
       />
+
       <p>
-        <strong>Status:</strong>{' '}
-        {data.status == 'unknown' ? 'No information' : data.status}
+        <strong>{fieldLabels.status}:</strong> {formatValue(data.status)}
       </p>
       <p>
-        <strong>Species:</strong>{' '}
-        {data.species == 'unknown' ? 'No information' : data.species}
+        <strong>{fieldLabels.species}:</strong> {formatValue(data.species)}
       </p>
       {data.type && (
         <p>
-          <strong>Type:</strong> {data.type}
+          <strong>{fieldLabels.type}:</strong> {formatValue(data.type)}
         </p>
       )}
       <p>
-        <strong>Gender:</strong>{' '}
-        {data.gender == 'unknown' ? 'No information' : data.gender}
+        <strong>{fieldLabels.gender}:</strong> {formatValue(data.gender)}
       </p>
       <p>
-        <strong>Origin:</strong>{' '}
-        {data.origin.name == 'unknown' ? 'No information' : data.origin.name}
+        <strong>{fieldLabels.origin}:</strong> {formatValue(data.origin.name)}
       </p>
       <p>
-        <strong>Location:</strong>{' '}
-        {data.location.name == 'unknown'
-          ? 'No information'
-          : data.location.name}
+        <strong>{fieldLabels.location}:</strong>{' '}
+        {formatValue(data.location.name)}
       </p>
       <p>
-        <strong>Episodes:</strong> {data.episode.length}
+        <strong>{fieldLabels.episodes}:</strong> {data.episode.length}
       </p>
       <p>
-        <strong>Created:</strong> {new Date(data.created).toLocaleDateString()}
+        <strong>{fieldLabels.created}:</strong>{' '}
+        {new Date(data.created).toLocaleDateString()}
       </p>
     </div>
   );

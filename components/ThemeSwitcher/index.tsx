@@ -1,8 +1,10 @@
 'use client';
 
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslations } from 'next-intl';
 
 export const ThemeSwitcher = () => {
+  const t = useTranslations('Theme');
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -12,8 +14,8 @@ export const ThemeSwitcher = () => {
         onChange={() => toggleTheme()}
         className="theme-select button"
       >
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
+        <option value="light">{t('light')}</option>
+        <option value="dark">{t('dark')}</option>
       </select>
     </div>
   );

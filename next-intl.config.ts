@@ -1,5 +1,7 @@
+import type { LocalePrefix } from 'next-intl/routing';
+
 export default {
-  locales: ['en', 'uk', 'ru'],
-  defaultLocale: 'en',
-  localeDetection: true,
+  locales: ['en', 'ru'] as const,
+  defaultLocale: 'ru' as const,
+  localePrefix: 'always' as LocalePrefix,
 };

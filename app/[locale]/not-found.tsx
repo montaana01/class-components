@@ -8,7 +8,7 @@ export default function NotFound() {
   return (
     <Container>
       <h1>{t('title')}</h1>
-      <Link href="/">{t('buttonTitle')}</Link>
+      <Link href="/public">{t('buttonTitle')}</Link>
     </Container>
   );
 }

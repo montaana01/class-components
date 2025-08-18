@@ -1,13 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-
-const constants = {
-  errorButtonText: 'Set Error',
-  errorMessage: 'Test error from ErrorButton',
-};
+import { useTranslations } from 'next-intl';
 
 export function ErrorButton() {
+  const i = useTranslations('Error');
   const [hasError, setHasError] = useState(false);
 
   function handleClick() {
@@ -15,7 +12,7 @@ export function ErrorButton() {
   }
 
   if (hasError) {
-    throw new Error(constants.errorMessage);
+    throw new Error(i('errorMessage'));
   }
-  return <button onClick={handleClick}>{constants.errorButtonText}</button>;
+  return <button onClick={handleClick}>{i('errorButtonText')}</button>;
 }
