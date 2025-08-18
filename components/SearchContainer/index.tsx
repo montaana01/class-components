@@ -1,21 +1,22 @@
 'use client';
 
-import { memo, useEffect } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import {memo, useEffect} from 'react';
+import {useRouter, usePathname, useSearchParams} from 'next/navigation';
+import {useTranslations} from 'next-intl';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import isEmptyArray from '@/helpers/isEmpty';
-import { fetchApi } from '@/api/apiDriver';
+import {fetchApi} from '@/api/apiDriver';
 import SearchInput from '@/components/Search/SearchInput';
 import SearchResult from '@/components/Search/SearchResult';
 import DetailedCard from '@/components/DetailedCard';
-import { FlyOut } from '@/components/FlyOut';
+import {FlyOut} from '@/components/FlyOut';
 import Button from '@/components/Button';
-import type { CharacterDetail } from '@/types';
-import { useSelectedItemsStore } from '@/store/selectedItemsStore';
-import { useQuery } from '@tanstack/react-query';
+import type {ApiResponse, CharacterDetail} from '@/types';
+import {useSelectedItemsStore} from '@/store/selectedItemsStore';
+import {useQuery} from '@tanstack/react-query';
 
-export default memo(function SearchContainer() {
+export default memo(function SearchContainer({initialData}: {initialData: ApiResponse<CharacterDetail>})
+{
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -26,7 +27,7 @@ export default memo(function SearchContainer() {
   const activeParam = searchParams.get('active');
 
   const [searchQuery, setSearchQuery] = useLocalStorage('searchTerm', '');
-  const { selectedItems } = useSelectedItemsStore();
+  const {selectedItems} = useSelectedItemsStore();
 
   const page = pageParam ? Number(pageParam) : 1;
   const query = queryParam || '';
@@ -40,11 +41,8 @@ export default memo(function SearchContainer() {
 
   const { data, isLoading, isError, error, isFetching, refetch } = useQuery({
     queryKey: ['characters', page, query],
-    queryFn: () =>
-      fetchApi<CharacterDetail>({
-        page,
-        query: query || undefined,
-      }),
+    queryFn: () => fetchApi<CharacterDetail>({ page, query: query || undefined }),
+    initialData: page === 1 && query === '' ? initialData : undefined,
   });
 
   const handleSearch = () => {
@@ -85,7 +83,7 @@ export default memo(function SearchContainer() {
         </p>
       )}
       <div className="search-header">
-        <FlyOut />
+        <FlyOut/>
         <div className="search-container">
           <SearchInput
             searchQuery={searchQuery}
@@ -93,8 +91,8 @@ export default memo(function SearchContainer() {
             onEnter={handleSearch}
             placeholder={t('searchPlaceholder')}
           />
-          <Button title={t('search')} onClick={handleSearch} />
-          <Button title={t('refresh')} onClick={handleRefetch} />
+          <Button title={t('search')} onClick={handleSearch}/>
+          <Button title={t('refresh')} onClick={handleRefetch}/>
         </div>
       </div>
 
@@ -123,10 +121,12 @@ export default memo(function SearchContainer() {
 
         {active ? (
           <div className="detail-panel">
-            <DetailedCard id={Number(active)} onClose={handleCloseCard} />
+            <DetailedCard id={Number(active)} onClose={handleCloseCard}/>
           </div>
         ) : null}
       </div>
     </>
   );
-});
+}
+)
+;

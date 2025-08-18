@@ -1,5 +1,5 @@
 import { API_PATH, API_URL } from './constants';
-import type { ApiResponse, FetchApiOptions } from '../types';
+import type { ApiResponse, FetchApiOptions } from '@/types';
 
 const basePath = `${API_URL}/${API_PATH}`;
 
