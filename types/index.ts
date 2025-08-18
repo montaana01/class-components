@@ -84,3 +84,11 @@ export type LayoutProps = {
   children: ReactNode;
   params: { locale: string };
 };
+
+export type SearchPageProps = {
+  searchParams: {
+    params?: string;
+    page?: string;
+    query?: string;
+  };
+};
