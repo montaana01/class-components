@@ -85,7 +85,7 @@ main {
   border: 2px solid var(--accent)
 }
 
-.error {
+.error, .error-text {
   color: #b91c1c;
   font-size: 13px;
   margin-top: 6px;
