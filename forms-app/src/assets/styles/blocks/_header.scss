@@ -1,0 +1,12 @@
+@use '../base/variables';
+
+.header {
+  width: 100%;
+
+  &_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: variables.$header-height;
+  }
+}
