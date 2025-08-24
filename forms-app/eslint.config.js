@@ -36,7 +36,6 @@ export default tslint.config(
       'no-console': 'warn',
       'no-duplicate-imports': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
-      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-member-accessibility': [
         'error',

@@ -19,8 +19,8 @@ export default function UncontrolledForm({ onClose }: { onClose: VoidFunction })
   const addEntry = useFormStore((state) => state.addEntry);
 
   const clearError = (fieldName: string) => {
-    setErrors(prev => {
-      const newErrors = { ...prev };
+    setErrors((previous) => {
+      const newErrors = { ...previous };
       delete newErrors[fieldName];
       return newErrors;
     });

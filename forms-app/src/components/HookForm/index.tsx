@@ -1,9 +1,9 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type FormValues, submitSchema } from '@/helpers/validator';
 import { fileToBase64 } from '@/helpers/fileToBase64';
 import { useFormStore } from '@/store/useFormStore';
 import { passwordStrengthScore, passwordStrengthLabel } from '@/helpers/passwordStrength';
+import { type SubmitHandler, useForm, type Resolver } from 'react-hook-form';
 
 export default function HookForm({ onClose }: { onClose: VoidFunction }) {
   const addEntry = useFormStore((state) => state.addEntry);
@@ -13,14 +13,14 @@ export default function HookForm({ onClose }: { onClose: VoidFunction }) {
     watch,
     formState: { errors, isValid, isSubmitting },
   } = useForm<FormValues>({
-    resolver: zodResolver(submitSchema),
-    mode: 'onChange'
+    resolver: zodResolver(submitSchema) as Resolver<FormValues>,
+    mode: 'onChange',
   });
 
   const pw = watch('password') || '';
   const score = passwordStrengthScore(pw);
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     let pic: string | undefined;
     const fileInput = document.querySelector('#hf-file') as HTMLInputElement;
     const file = fileInput?.files?.[0];
@@ -57,7 +57,7 @@ export default function HookForm({ onClose }: { onClose: VoidFunction }) {
       </div>
       <div className="form-row">
         <label htmlFor="hf-age">Age</label>
-        <input id="hf-age" type="number" {...register('age')} />
+        <input id="hf-age" type="number" {...register('age', { valueAsNumber: true })} />
         <div className="error">{errors.age?.message}</div>
       </div>
       <div className="form-row">

@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
-import {Container} from '@/components/Container';
+import { useEffect, useState } from 'react';
+import { Container } from '@/components/Container';
 import '@/assets/styles/global.scss';
-import {countries} from '@/constants';
-import {useFormStore} from '@/store/useFormStore';
+import { countries } from '@/constants';
+import { useFormStore } from '@/store/useFormStore';
 import ModalPortal from '@/components/ModalPortal';
 import UncontrolledForm from '@/components/UncontrolledForm';
 import HookForm from '@/components/HookForm';
@@ -44,11 +44,7 @@ function App() {
               <div>gender: {entry.gender}</div>
               <div>country: {entry.country}</div>
               {entry.pictureBase64 && (
-                <img
-                  src={entry.pictureBase64}
-                  alt="pic"
-                  className={'tile_image'}
-                />
+                <img src={entry.pictureBase64} alt="pic" className={'tile_image'} />
               )}
             </div>
           ))}
@@ -64,8 +60,8 @@ function App() {
               <h2 id="modal-title">{open === 'uc' ? 'Uncontrolled' : 'Hook Form'}</h2>
               <button onClick={() => setOpen('none')}>X</button>
             </div>
-            {open === 'uc' && <UncontrolledForm onClose={() => setOpen('none')}/>}
-            {open === 'hf' && <HookForm onClose={() => setOpen('none')}/>}
+            {open === 'uc' && <UncontrolledForm onClose={() => setOpen('none')} />}
+            {open === 'hf' && <HookForm onClose={() => setOpen('none')} />}
           </ModalPortal>
         </Container>
       </main>
