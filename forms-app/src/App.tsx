@@ -47,7 +47,7 @@ function App() {
                 <img
                   src={entry.pictureBase64}
                   alt="pic"
-                  className={'main_image'}
+                  className={'tile_image'}
                 />
               )}
             </div>
