@@ -6,7 +6,7 @@
   &_wrapper {
     display: flex;
     align-items: center;
-    height: 3rem;
+    height: variables.$header-height;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
