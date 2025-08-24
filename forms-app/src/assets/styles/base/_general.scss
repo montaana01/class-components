@@ -63,3 +63,44 @@ main {
   margin: 0 auto;
   padding: 0 40px;
 }
+
+.tile {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+}
+
+.newly {
+  border: 2px solid var(--accent)
+}
+
+.error {
+  color: #b91c1c;
+  font-size: 13px;
+  margin-top: 6px;
+  min-height: 18px
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal {
+  background: white;
+  padding: 18px;
+  border-radius: 8px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px
+}

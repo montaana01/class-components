@@ -1,7 +1,7 @@
 import { create } from 'zustand/react';
 import type { State } from '@/types';
 
-export const useStore = create<State>((set) => ({
+export const useFormStore = create<State>((set) => ({
   entries: [],
   countries: [],
   addEntry: (entry) =>

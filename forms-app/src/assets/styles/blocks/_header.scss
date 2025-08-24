@@ -6,7 +6,9 @@
   &_wrapper {
     display: flex;
     align-items: center;
+    height: 3rem;
+    flex-direction: column;
     justify-content: center;
-    height: variables.$header-height;
+    gap: 10px;
   }
 }

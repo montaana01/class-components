@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import type { ModalPortalProps } from "@/types";
+import type { ModalPortalProps } from '@/types';
 
 export default function ModalPortal({ open, onClose, labelledBy, children }: ModalPortalProps) {
   const elementReference = useRef<HTMLDivElement | null>(null);
