@@ -18,6 +18,16 @@ export const submitSchema = z
       message: 'Accept terms to continue',
     }),
     country: z.string().min(2),
+    file: z
+      .instanceof(File)
+      .refine(
+        (file) => ['image/png', 'image/jpeg'].includes(file.type),
+        { message: 'Only png/jpeg allowed' }
+      )
+      .refine((file) => file.size <= 2 * 1024 * 1024, {
+        message: 'Max 2MB',
+      })
+      .optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],

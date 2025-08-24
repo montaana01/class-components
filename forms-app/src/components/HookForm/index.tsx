@@ -1,17 +1,17 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { type FormValues, submitSchema } from '@/helpers/validator';
-import { fileToBase64 } from '@/helpers/fileToBase64';
-import { useFormStore } from '@/store/useFormStore';
-import { passwordStrengthScore, passwordStrengthLabel } from '@/helpers/passwordStrength';
-import { type SubmitHandler, useForm, type Resolver } from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {type FormValues, submitSchema} from '@/helpers/validator';
+import {fileToBase64} from '@/helpers/fileToBase64';
+import {useFormStore} from '@/store/useFormStore';
+import {passwordStrengthScore, passwordStrengthLabel} from '@/helpers/passwordStrength';
+import {type SubmitHandler, useForm, type Resolver} from 'react-hook-form';
 
-export default function HookForm({ onClose }: { onClose: VoidFunction }) {
+export default function HookForm({onClose}: { onClose: VoidFunction }) {
   const addEntry = useFormStore((state) => state.addEntry);
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid, isSubmitting },
+    formState: {errors, isValid, isSubmitting},
   } = useForm<FormValues>({
     resolver: zodResolver(submitSchema) as Resolver<FormValues>,
     mode: 'onChange',
@@ -22,17 +22,8 @@ export default function HookForm({ onClose }: { onClose: VoidFunction }) {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     let pic: string | undefined;
-    const fileInput = document.querySelector('#hf-file') as HTMLInputElement;
-    const file = fileInput?.files?.[0];
-
-    if (file) {
-      if (!['image/png', 'image/jpeg'].includes(file.type)) {
-        throw new Error('Invalid file');
-      }
-      if (file.size > 2_000_000) {
-        throw new Error('Large file');
-      }
-      pic = await fileToBase64(file);
+    if (data.file) {
+      pic = await fileToBase64(data.file);
     }
 
     addEntry({
@@ -57,7 +48,7 @@ export default function HookForm({ onClose }: { onClose: VoidFunction }) {
       </div>
       <div className="form-row">
         <label htmlFor="hf-age">Age</label>
-        <input id="hf-age" type="number" {...register('age', { valueAsNumber: true })} />
+        <input id="hf-age" type="number" {...register('age', {valueAsNumber: true})} />
         <div className="error">{errors.age?.message}</div>
       </div>
       <div className="form-row">
@@ -100,9 +91,17 @@ export default function HookForm({ onClose }: { onClose: VoidFunction }) {
       </div>
       <div className="form-row">
         <label htmlFor="hf-file">Picture (png/jpeg, max 2MB)</label>
-        <input id="hf-file" type="file" accept="image/png,image/jpeg" />
+        <input
+          id="hf-file"
+          type="file"
+          accept="image/png,image/jpeg"
+          {...register('file', {
+            setValueAs: (v: FileList | null) => v?.[0] || undefined
+          })}
+        />
+        <div className="error">{errors.file?.message}</div>
       </div>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{display: 'flex', gap: 8}}>
         <button type="submit" disabled={!isValid || isSubmitting}>
           Submit
         </button>

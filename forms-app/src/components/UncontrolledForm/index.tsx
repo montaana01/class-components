@@ -1,10 +1,10 @@
-import { type FormEvent, useRef, useState } from 'react';
-import { submitSchema } from '@/helpers/validator';
-import { fileToBase64 } from '@/helpers/fileToBase64';
-import { useFormStore } from '@/store/useFormStore';
-import type { ZodIssue } from 'zod';
+import {type FormEvent, useRef, useState} from 'react';
+import {submitSchema} from '@/helpers/validator';
+import {fileToBase64} from '@/helpers/fileToBase64';
+import {useFormStore} from '@/store/useFormStore';
+import type {ZodIssue} from 'zod';
 
-export default function UncontrolledForm({ onClose }: { onClose: VoidFunction }) {
+export default function UncontrolledForm({onClose}: { onClose: VoidFunction }) {
   const nameReference = useRef<HTMLInputElement | null>(null);
   const ageReference = useRef<HTMLInputElement | null>(null);
   const emailReference = useRef<HTMLInputElement | null>(null);
@@ -20,7 +20,7 @@ export default function UncontrolledForm({ onClose }: { onClose: VoidFunction })
 
   const clearError = (fieldName: string) => {
     setErrors((previous) => {
-      const newErrors = { ...previous };
+      const newErrors = {...previous};
       delete newErrors[fieldName];
       return newErrors;
     });
@@ -37,6 +37,7 @@ export default function UncontrolledForm({ onClose }: { onClose: VoidFunction })
       gender: genderReference.current?.value || 'other',
       country: countryReference.current?.value || '',
       acceptTos: Boolean(acceptReference.current?.checked),
+      file: fileReference.current?.files?.[0],
     };
 
     const parsed = submitSchema.safeParse(payload);
@@ -59,17 +60,10 @@ export default function UncontrolledForm({ onClose }: { onClose: VoidFunction })
     }
 
     let pic: string | undefined;
-    const f = fileReference.current?.files?.[0];
-    if (f) {
-      if (!['image/png', 'image/jpeg'].includes(f.type)) {
-        alert('Only png/jpeg allowed');
-        return;
-      }
-      if (f.size > 2_000_000) {
-        alert('Max 2MB allowed');
-        return;
-      }
-      pic = await fileToBase64(f);
+    const file = fileReference.current?.files?.[0];
+    if (file) {
+      console.log(`${file.size} bytes`);
+      pic = await fileToBase64(file);
     }
 
     addEntry({
@@ -178,9 +172,15 @@ export default function UncontrolledForm({ onClose }: { onClose: VoidFunction })
       </div>
       <div className="form-row">
         <label htmlFor="uc-file">Picture (png/jpeg, max 2MB)</label>
-        <input id="uc-file" type="file" accept="image/png,image/jpeg" ref={fileReference} />
+        <input
+          id="uc-file"
+          ref={fileReference}
+          type="file"
+          accept="image/png,image/jpeg"
+        />
+        {errors.file && <span className="error-text">{errors.file}</span>}
       </div>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{display: 'flex', gap: 8}}>
         <button type="submit">Submit</button>
         <button type="button" onClick={onClose}>
           Cancel
