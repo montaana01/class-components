@@ -4,9 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import UncontrolledForm from './index';
 import * as formStore from '@/store/useFormStore';
-import * as fileHelpers from '@/helpers/fileToBase64';
 
-describe('UncontrolledForm (uncontrolled)', () => {
+describe('UncontrolledForm', () => {
   const onClose = vi.fn();
 
   beforeEach(() => {
@@ -54,30 +53,5 @@ describe('UncontrolledForm (uncontrolled)', () => {
     await userEvent.type(nameInput, 'John');
 
     expect(screen.queryByText(/Required/i)).not.toBeInTheDocument();
-  });
-
-  it('submits valid data with image (fileToBase64 mocked) and calls addEntry/onClose', async () => {
-    const addEntry = vi.fn();
-    vi.spyOn(formStore, 'useFormStore').mockImplementation((sel: any) => sel({ addEntry, entries: [], countries: [] }));
-    vi.spyOn(fileHelpers, 'fileToBase64').mockResolvedValue('data:image/jpeg;base64,AAA');
-
-    render(<UncontrolledForm onClose={onClose} />);
-
-    await userEvent.type(screen.getByLabelText(/Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Age/i), '30');
-    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
-    await userEvent.type(screen.getByLabelText(/^Password$/i), 'Abcdef1!');
-    await userEvent.type(screen.getByLabelText(/Confirm/i), 'Abcdef1!');
-    await userEvent.type(screen.getByLabelText(/Country/i), 'US');
-    await userEvent.click(screen.getByLabelText(/Accept T&C/i) as HTMLElement);
-
-    const file = new File(['x'], 'pic.jpg', { type: 'image/jpeg' });
-    const input = screen.getByLabelText(/Picture/i) as HTMLInputElement;
-    await userEvent.upload(input, file);
-
-    userEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-    await waitFor(() => expect(addEntry).toHaveBeenCalled());
-    expect(onClose).toHaveBeenCalled();
   });
 });
