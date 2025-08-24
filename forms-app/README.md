@@ -1,69 +1,14 @@
-# React + TypeScript + Vite
+# React + TypeScript + ViteForms with React Portals
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. Task: [link](https://github.com/rolling-scopes-school/tasks/blob/master/react/modules/tasks/forms.md)
+2. Deploy: [link](https://github.com/)
+3. Done 25.08.2025 / deadline 25.08.2025
+4. Score: xx / 100
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [ ] Universal, single modal with React Portal (reusable for both controlled and uncontrolled forms) - 15 points
+- [ ] State Management set up with Redux or Zustand and used to collect data from both forms, proper modal behavior (accessibility, close on ESC/outside click) - 15 points
+- [ ] Validation works for both forms according to the requirements (error messages, blocking submit button), Yup or Zod is used for validation (10 points if works only for one form) - 15 points
+- [ ] Name, age, email, gender picker, accept T&C are implemented for both forms and collect data (if something doesn't work, score can be less) - 15 points
+- [ ] Input for image is implemented for both forms, image is saved as base64 and display on the main page after form submission - 15 points
+- [ ] Passwords (with password strength) are implemented for both forms - 15 points
+- [ ] Autocomplete works for both forms - 10 points Max points should be assigned in case if the requirement has been implemented for both forms, if something doesn't work, score should be less
