@@ -1,3 +1,5 @@
+import type {ReactNode} from "react";
+
 export type FormEntry = {
   id: string;
   source: 'uncontrolled' | 'hookform';
@@ -16,4 +18,11 @@ export type State = {
   countries: string[];
   addEntry: (entry: Omit<FormEntry, 'id' | 'createdAt'>) => void;
   setCountries: (countries: string[]) => void;
+};
+
+export type ModalPortalProps = {
+  open: boolean;
+  onClose: VoidFunction;
+  labelledBy?: string;
+  children: ReactNode;
 };
