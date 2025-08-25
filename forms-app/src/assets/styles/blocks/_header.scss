@@ -1,0 +1,14 @@
+@use '../base/variables';
+
+.header {
+  width: 100%;
+
+  &_wrapper {
+    display: flex;
+    align-items: center;
+    height: variables.$header-height;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,116 @@
+@use 'variables';
+
+:root {
+  --main-color: #e4f1fc;
+  --second-color: #d7e5f4;
+  --text-color: #7e8493;
+  --hover-text-color: #9fb0dc;
+  --submit-color: #8362dd;
+  --buttons-color: #6e8ff3;
+  --unactive-color: #657387;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  text-align: center;
+
+  &::before {
+    box-sizing: border-box;
+  }
+
+  &::after {
+    box-sizing: border-box;
+  }
+
+  a {
+    cursor: pointer;
+    color: var(--text-color);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--hover-text-color);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--main-color);
+}
+
+main {
+  width: 100%;
+  min-height: variables.$main-height;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.tile {
+  margin-top: 30px;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+
+  &_image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 8px;
+  }
+}
+
+
+.newly {
+  border: 2px solid var(--accent)
+}
+
+.error, .error-text {
+  color: #b91c1c;
+  font-size: 13px;
+  margin-top: 6px;
+  min-height: 18px
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal {
+  background: white;
+  padding: 18px;
+  border-radius: 8px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px
+}
