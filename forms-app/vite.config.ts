@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import {defineConfig} from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import path from 'node:path';
 
@@ -20,7 +20,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text'],
-      exclude: ["src/types/**", "src/main.tsx?"],
+      exclude: ["src/types/**", "src/main.tsx?", "dist", ".stylelintrc.cjs", "eslint.config.js", "vite.config.ts"],
       thresholds: {
         statements: 80,
         branches: 50,
