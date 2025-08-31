@@ -18,9 +18,9 @@ export const CountryList = () => {
 
   const [selectedYear, setSelectedYear] = useState<number>(2023);
   const [search, setSearch] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'pop-asc' | 'pop-desc'>(
-    'name-asc'
-  );
+  const [sortBy, setSortBy] = useState<
+    'name-asc' | 'name-desc' | 'pop-asc' | 'pop-desc'
+  >('name-asc');
 
   const allYears: number[] = (() => {
     const years = new Set<number>();
@@ -40,9 +40,16 @@ export const CountryList = () => {
     }
 
     countries.sort(
-      ([nameA, cA]: [string, CountryDataType], [nameB, cB]: [string, CountryDataType]) => {
-        const popA = cA.data.find((d: YearDataType) => d.year === selectedYear)?.population ?? 0;
-        const popB = cB.data.find((d: YearDataType) => d.year === selectedYear)?.population ?? 0;
+      (
+        [nameA, cA]: [string, CountryDataType],
+        [nameB, cB]: [string, CountryDataType]
+      ) => {
+        const popA =
+          cA.data.find((d: YearDataType) => d.year === selectedYear)
+            ?.population ?? 0;
+        const popB =
+          cB.data.find((d: YearDataType) => d.year === selectedYear)
+            ?.population ?? 0;
 
         switch (sortBy) {
           case 'name-asc':
@@ -70,7 +77,9 @@ export const CountryList = () => {
   ];
 
   const toggleColumn = (field: string) => {
-    setExtraColumns((prev) => (prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field]));
+    setExtraColumns((prev) =>
+      prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field]
+    );
   };
 
   return (
@@ -78,7 +87,10 @@ export const CountryList = () => {
       <div className={styles.controls}>
         <label>
           Year:
-          <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(Number(e.target.value))}
+          >
             {allYears.map((y) => (
               <option key={y} value={y}>
                 {y}
@@ -100,7 +112,11 @@ export const CountryList = () => {
             value={sortBy}
             onChange={(e) =>
               setSortBy(
-                e.target.value as 'name-asc' | 'name-desc' | 'pop-asc' | 'pop-desc'
+                e.target.value as
+                  | 'name-asc'
+                  | 'name-desc'
+                  | 'pop-asc'
+                  | 'pop-desc'
               )
             }
           >
@@ -111,34 +127,37 @@ export const CountryList = () => {
           </select>
         </label>
 
-        <button onClick={() => setIsModalOpen(true)} className={styles.settingsBtn}>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className={styles.settingsBtn}
+        >
           ⚙️ Select Columns
         </button>
       </div>
 
       <table className={styles.countryTable}>
         <thead>
-        <tr>
-          <th>Country</th>
-          {defaultColumns.map((col) => (
-            <th key={col}>{col}</th>
-          ))}
-          <th>ISO code</th>
-          {extraColumns.map((col) => (
-            <th key={col}>{col}</th>
-          ))}
-        </tr>
+          <tr>
+            <th>Country</th>
+            {defaultColumns.map((col) => (
+              <th key={col}>{col}</th>
+            ))}
+            <th>ISO code</th>
+            {extraColumns.map((col) => (
+              <th key={col}>{col}</th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-        {filteredCountries.map(([name, country]) => (
-          <CountryCard
-            key={name}
-            name={name}
-            countryObj={country}
-            extraColumns={extraColumns}
-            selectedYear={selectedYear}
-          />
-        ))}
+          {filteredCountries.map(([name, country]) => (
+            <CountryCard
+              key={name}
+              name={name}
+              countryObj={country}
+              extraColumns={extraColumns}
+              selectedYear={selectedYear}
+            />
+          ))}
         </tbody>
       </table>
 
