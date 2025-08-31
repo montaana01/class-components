@@ -9,6 +9,7 @@
     padding: 0.6rem 0.8rem;
     text-align: center;
   }
+
   td {
     text-align: left;
   }
@@ -25,11 +26,23 @@
   tr:nth-child(even) {
     background-color: #eaeaea;
   }
+
   tr:nth-child(odd) {
     background-color: #444;
   }
+}
+.settingsBtn {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  background: #007bff;
+  color: #000000;
+  border: none;
+  cursor: pointer;
 
-  td {
-    color: #171717;
+  &:hover {
+    background: #0066d1;
   }
 }
