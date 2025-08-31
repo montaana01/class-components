@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CountryCard } from '../CountryCard';
 import styles from './list.module.scss';
 import { fetchCO2Data } from '../../data/CO2Data';
-import { ColumnModal } from '../ColumnModal'
+import { ColumnModal } from '../ColumnModal';
 import type { SourceDataType } from '../../types';
 
 const defaultColumns = ['year', 'population', 'co2', 'co2_per_capita'];
@@ -28,30 +28,35 @@ export const CountryList = () => {
 
   return (
     <div className="container">
-      <button className={styles.settingsBtn} onClick={() => setIsModalOpen(true)}>⚙️ Select Columns</button>
+      <button
+        className={styles.settingsBtn}
+        onClick={() => setIsModalOpen(true)}
+      >
+        ⚙️ Select Columns
+      </button>
 
       <table className={styles.countryTable}>
         <thead>
-        <tr>
-          <th>Country</th>
-          {defaultColumns.map((col) => (
-            <th key={col}>{col}</th>
-          ))}
-          <th>ISO code</th>
-          {extraColumns.map((col) => (
-            <th key={col}>{col}</th>
-          ))}
-        </tr>
+          <tr>
+            <th>Country</th>
+            {defaultColumns.map((col) => (
+              <th key={col}>{col}</th>
+            ))}
+            <th>ISO code</th>
+            {extraColumns.map((col) => (
+              <th key={col}>{col}</th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-        {Object.entries(data).map(([name, country]) => (
-          <CountryCard
-            key={name}
-            name={name}
-            countryObj={country}
-            extraColumns={extraColumns}
-          />
-        ))}
+          {Object.entries(data).map(([name, country]) => (
+            <CountryCard
+              key={name}
+              name={name}
+              countryObj={country}
+              extraColumns={extraColumns}
+            />
+          ))}
         </tbody>
       </table>
 

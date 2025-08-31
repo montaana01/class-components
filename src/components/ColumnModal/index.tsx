@@ -2,10 +2,10 @@ import { type ReactNode } from 'react';
 import styles from './modal.module.scss';
 
 export const ColumnModal = ({
-                        isOpen,
-                        onClose,
-                        children,
-                      }: {
+  isOpen,
+  onClose,
+  children,
+}: {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
