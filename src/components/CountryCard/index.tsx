@@ -16,9 +16,7 @@ export const CountryCard = ({
       <td>{lastYearData?.year ?? '—'}</td>
       <td>{lastYearData?.population ?? '—'}</td>
       <td>{lastYearData?.co2 ?? '—'}</td>
-      <td>{lastYearData?.co2_per_capita ?? '—'}</td>
       <td>{lastYearData?.iso_code ?? countryObj.iso_code ?? '—'}</td>
-      <td>{lastYearData?.region ?? countryObj.region ?? '—'}</td>
     </tr>
   );
 };
