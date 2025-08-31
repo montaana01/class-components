@@ -8,15 +8,16 @@ export const CountryCard = ({
   name,
   countryObj,
   extraColumns = [],
+  selectedYear,
 }: {
   name: string;
   countryObj: CountryDataType;
   extraColumns?: string[];
+  selectedYear: number;
 }) => {
   const [expanded, setExpanded] = useState(false);
 
-  const maxYear = Math.max(...countryObj.data.map((entry) => entry.year));
-  const lastYearData = countryObj.data.find((entry) => entry.year === maxYear);
+  const yearData = countryObj.data.find((entry) => entry.year === selectedYear);
 
   return (
     <>
@@ -29,14 +30,14 @@ export const CountryCard = ({
         }}
       >
         <td>{name}</td>
-        <td>{lastYearData?.year ?? notFound}</td>
-        <td>{lastYearData?.population ?? notFound}</td>
-        <td>{lastYearData?.co2 ?? notFound}</td>
-        <td>{lastYearData?.co2_per_capita ?? notFound}</td>
-        <td>{lastYearData?.iso_code ?? countryObj.iso_code ?? notFound}</td>
+        <td>{yearData?.year ?? notFound}</td>
+        <td>{yearData?.population ?? notFound}</td>
+        <td>{yearData?.co2 ?? notFound}</td>
+        <td>{yearData?.co2_per_capita ?? notFound}</td>
+        <td>{yearData?.iso_code ?? countryObj.iso_code ?? notFound}</td>
         {extraColumns.map((col) => (
           <td key={col}>
-            {lastYearData?.[col as keyof typeof lastYearData] ?? notFound}
+            {yearData?.[col as keyof typeof yearData] ?? notFound}
           </td>
         ))}
       </tr>
