@@ -7,4 +7,5 @@
 
 ## After optimisation
 
-![After](after.png)
+![After-flare](after-flare.png)
+![After-ranked](after-ranked.png)
