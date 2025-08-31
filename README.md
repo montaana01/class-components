@@ -2,7 +2,8 @@
 
 ## Before optimisation
 
-![Before](before.png)
+![Before-flare](before-flare.png)
+![Before-ranked](before-ranked.png)
 
 ## After optimisation
 
