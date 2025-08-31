@@ -1,20 +1,27 @@
-import { useState } from 'react';
-import './App.css';
+import { Suspense } from 'react';
+import { Loader } from './components/Loader';
+import { CountryList } from './components/CountryList';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>React Performance</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
+      <header className="header">
+        <h1>React Performance — CO2</h1>
+      </header>
+      <Suspense fallback={<Loader />}>
+        <CountryList />
+      </Suspense>
+      <footer>
+        <div className="container">
+          <h3>
+            Made by{' '}
+            <a href="https://linkedin.com/in/yakovlevdeveloper">
+              Alexey Yakovlev
+            </a>
+          </h3>
+          <h4>© {new Date().getFullYear()} | Minsk, Belarus</h4>
+        </div>
+      </footer>
     </>
   );
 }
