@@ -1,10 +1,10 @@
 import type { SourceDataType } from '../../types';
-import { mockData } from './constants.ts';
 import { CountryCard } from '../CountryCard';
 import styles from './list.module.scss';
+import { fetchCO2Data } from "../../data/CO2Data";
 
 export const CountryList = () => {
-  const data: SourceDataType = mockData;
+  const data: SourceDataType = fetchCO2Data();
 
   return (
     <div className="container">
